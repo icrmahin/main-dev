@@ -23,11 +23,6 @@ const CONTACT_LINKS = [
   { label: "GitHub", href: "https://github.com" },
 ] as const;
 
-const FOOTER = {
-  copyright: "© 2026 Abdulla Al Mahin",
-  location: "Dhaka · Bangladesh",
-} as const;
-
 /* ---------------------------------------------------------------------------
    Animation constants
    --------------------------------------------------------------------------- */
@@ -53,7 +48,6 @@ export default function Cta() {
   const descRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<HTMLSpanElement>(null);
 
   /* ---- CTA button hover ---- */
@@ -96,7 +90,7 @@ export default function Cta() {
         Boolean,
       ) as Element[];
 
-      gsap.set(targets, { opacity: 0, y: 14 });
+      gsap.set(targets, { opacity: 0, y: 12 });
 
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -140,74 +134,63 @@ export default function Cta() {
 
   /* ---- render ---- */
   return (
-    <>
-      <section
-        ref={sectionRef}
-        id="contact"
-        aria-label="Contact"
-        className="flex flex-col items-center px-6 pb-[100px] pt-[160px] text-center max-md:pb-[80px] max-md:pt-[100px]"
+    <section
+      ref={sectionRef}
+      id="contact"
+      aria-label="Contact"
+      className="flex flex-col items-center px-6 pb-[120px] pt-[140px] text-center max-md:pb-[80px] max-md:pt-[100px]"
+    >
+      {/* headline */}
+      <h2
+        ref={headlineRef}
+        className="mb-4 whitespace-pre-line text-[clamp(28px,4.5vw,46px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
       >
-        {/* headline */}
-        <h2
-          ref={headlineRef}
-          className="mb-5 whitespace-pre-line text-[clamp(32px,5vw,52px)] font-medium leading-[1.02] tracking-[-0.04em] text-[var(--color-ink)]"
-        >
-          {HEADLINE}
-        </h2>
+        {HEADLINE}
+      </h2>
 
-        {/* description */}
-        <p
-          ref={descRef}
-          className="mb-9 max-w-[460px] text-[15px] leading-[1.65] text-[var(--color-ink-secondary)]"
-        >
-          {DESCRIPTION}
-        </p>
-
-        {/* primary CTA */}
-        <div ref={ctaRef}>
-          <Link
-            href={CTA.href}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-2.5 text-[13px] font-medium text-[var(--color-background)] transition-colors duration-200 hover:bg-[var(--color-primary-hover)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--color-violet)]"
-          >
-            {CTA.label}
-            <span ref={arrowRef} className="inline-flex">
-              <ArrowUpRight size={14} strokeWidth={2.2} />
-            </span>
-          </Link>
-        </div>
-
-        {/* contact links */}
-        <div ref={linksRef} className="mt-8 flex items-center gap-4">
-          {CONTACT_LINKS.map((link, i) => (
-            <span key={link.label} className="flex items-center gap-4">
-              {i > 0 && (
-                <span className="text-[var(--color-ink-muted)]">·</span>
-              )}
-              <Link
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel={
-                  link.href.startsWith("http")
-                    ? "noopener noreferrer"
-                    : undefined
-                }
-                className="text-[13px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink-secondary)]"
-              >
-                {link.label}
-              </Link>
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* ---- footer ---- */}
-      <footer
-        ref={footerRef}
-        className="mx-auto flex w-full max-w-[1060px] items-center justify-between border-t border-[var(--color-border-subtle)] px-6 py-6 text-[11px] font-medium text-[var(--color-ink-muted)] max-md:flex-col max-md:gap-3 max-md:text-center"
+      {/* description */}
+      <p
+        ref={descRef}
+        className="mb-8 max-w-[420px] text-[14px] leading-[1.65] text-[var(--color-ink-secondary)]"
       >
-        <span>{FOOTER.copyright}</span>
-        <span>{FOOTER.location}</span>
-      </footer>
-    </>
+        {DESCRIPTION}
+      </p>
+
+      {/* primary CTA */}
+      <div ref={ctaRef}>
+        <Link
+          href={CTA.href}
+          className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-[12px] font-medium text-[var(--color-background)] transition-colors duration-200 hover:bg-[var(--color-primary-hover)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--color-violet)]"
+        >
+          {CTA.label}
+          <span ref={arrowRef} className="inline-flex">
+            <ArrowUpRight size={13} strokeWidth={2.2} />
+          </span>
+        </Link>
+      </div>
+
+      {/* contact links */}
+      <div ref={linksRef} className="mt-7 flex items-center gap-3.5">
+        {CONTACT_LINKS.map((link, i) => (
+          <span key={link.label} className="flex items-center gap-3.5">
+            {i > 0 && (
+              <span className="text-[var(--color-ink-muted)]">·</span>
+            )}
+            <Link
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={
+                link.href.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+              className="text-[12px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink-secondary)]"
+            >
+              {link.label}
+            </Link>
+          </span>
+        ))}
+      </div>
+    </section>
   );
 }

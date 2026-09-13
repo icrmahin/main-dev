@@ -8,6 +8,19 @@ import { useGSAP } from "@gsap/react";
 import { ArrowUpRight, Mail } from "lucide-react";
 
 /* ---------------------------------------------------------------------------
+   Content
+   --------------------------------------------------------------------------- */
+
+const NAME = "Abdulla Al Mahin";
+const HEADLINE_LINE_1 = "Product Engineer";
+const HEADLINE_LINE_2 = "design × engineering × AI";
+const DESCRIPTION =
+  "I design and engineer digital products — combining thoughtful interaction design, modern frontend systems, and AI.";
+
+const CTA_PRIMARY = { label: "View work", href: "#work" };
+const CTA_SECONDARY = { label: "About", href: "#about" };
+
+/* ---------------------------------------------------------------------------
    Inline brand icons (lucide-react dropped brand marks)
    --------------------------------------------------------------------------- */
 
@@ -35,19 +48,6 @@ function XIcon({ size = 15 }: { size?: number }) {
   );
 }
 
-/* ---------------------------------------------------------------------------
-   Content
-   --------------------------------------------------------------------------- */
-
-const NAME = "Abdulla Al Mahin";
-const HEADLINE_LINE_1 = "Product Engineer";
-const HEADLINE_LINE_2 = "designing, engineering & shipping digital products.";
-const DESCRIPTION =
-  "I design and engineer digital products from interface to implementation — combining thoughtful interaction design, modern frontend systems, and AI.";
-
-const CTA_PRIMARY = { label: "View work", href: "#work" };
-const CTA_SECONDARY = { label: "About", href: "#about" };
-
 const SOCIAL_LINKS = [
   { label: "GitHub", href: "https://github.com", icon: GithubIcon },
   { label: "LinkedIn", href: "https://linkedin.com", icon: LinkedinIcon },
@@ -63,13 +63,12 @@ const EASE = "power3.out" as const;
 
 const SEQUENCE = [
   { key: "avatar", delay: 0 },
-  { key: "name", delay: 0.1 },
-  { key: "line1", delay: 0.18 },
-  { key: "line2", delay: 0.26 },
-  { key: "desc", delay: 0.34 },
-  { key: "cta", delay: 0.42 },
-  { key: "social", delay: 0.5 },
-  { key: "scroll", delay: 0.6 },
+  { key: "name", delay: 0.08 },
+  { key: "line1", delay: 0.16 },
+  { key: "line2", delay: 0.24 },
+  { key: "desc", delay: 0.32 },
+  { key: "cta", delay: 0.4 },
+  { key: "social", delay: 0.48 },
 ] as const;
 
 /* ---------------------------------------------------------------------------
@@ -94,14 +93,12 @@ export default function Hero() {
   const descRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const socialRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   /* ---- entrance animation ---- */
   useGSAP(
     () => {
       const reduced = prefersReducedMotion();
 
-      /* targets in reveal order */
       const targets = [
         avatarRef.current,
         nameRef.current,
@@ -110,7 +107,6 @@ export default function Hero() {
         descRef.current,
         ctaRef.current,
         socialRef.current,
-        scrollRef.current,
       ].filter(Boolean) as Element[];
 
       if (reduced) {
@@ -118,8 +114,7 @@ export default function Hero() {
         return;
       }
 
-      /* staggered entrance */
-      gsap.set(targets, { opacity: 0, y: 14 });
+      gsap.set(targets, { opacity: 0, y: 12 });
 
       const tl = gsap.timeline({ delay: 0.15 });
 
@@ -130,7 +125,7 @@ export default function Hero() {
           {
             opacity: 1,
             y: 0,
-            duration: s.key === "line1" || s.key === "line2" ? 0.65 : 0.5,
+            duration: s.key === "line1" || s.key === "line2" ? 0.6 : 0.45,
             ease: EASE,
           },
           s.delay,
@@ -145,7 +140,7 @@ export default function Hero() {
           gsap.fromTo(
             inner,
             { yPercent: 100 },
-            { yPercent: 0, duration: 0.7, ease: EASE, delay: 0.15 },
+            { yPercent: 0, duration: 0.65, ease: EASE, delay: 0.12 },
           );
         }
       });
@@ -171,8 +166,8 @@ export default function Hero() {
           gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" });
         } else if (d > 2) {
           gsap.to(el, {
-            y: -16,
-            opacity: 0.85,
+            y: -12,
+            opacity: 0.88,
             duration: 0.4,
             ease: "power2.out",
           });
@@ -183,24 +178,6 @@ export default function Hero() {
 
       window.addEventListener("scroll", onScroll, { passive: true });
       return () => window.removeEventListener("scroll", onScroll);
-    },
-    { scope: sectionRef },
-  );
-
-  /* ---- scroll indicator loop ---- */
-  useGSAP(
-    () => {
-      if (prefersReducedMotion()) return;
-      const el = scrollRef.current;
-      if (!el) return;
-
-      gsap.to(el, {
-        y: 5,
-        duration: 1.4,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true,
-      });
     },
     { scope: sectionRef },
   );
@@ -224,10 +201,10 @@ export default function Hero() {
       const onMove = (e: MouseEvent) => {
         const w = window.innerWidth;
         const h = window.innerHeight;
-        const dx = ((e.clientX - w / 2) / w) * 6;
-        const dy = ((e.clientY - h / 2) / h) * 4;
-        xTo(Math.max(-5, Math.min(5, dx)));
-        yTo(Math.max(-4, Math.min(4, dy)));
+        const dx = ((e.clientX - w / 2) / w) * 5;
+        const dy = ((e.clientY - h / 2) / h) * 3;
+        xTo(Math.max(-4, Math.min(4, dx)));
+        yTo(Math.max(-3, Math.min(3, dy)));
       };
 
       window.addEventListener("mousemove", onMove, { passive: true });
@@ -243,15 +220,15 @@ export default function Hero() {
       aria-label="Hero"
       className="relative flex min-h-[85vh] flex-col items-center justify-center px-6"
     >
-      <div className="flex max-w-[560px] flex-col items-center text-center">
+      <div className="flex max-w-[520px] flex-col items-center text-center">
         {/* ---- avatar ---- */}
         <div ref={avatarRef} className="mb-5">
-          <div className="relative h-[68px] w-[68px] overflow-hidden rounded-full shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+          <div className="relative h-[60px] w-[60px] overflow-hidden rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.06)]">
             <Image
               src="/avater.jpeg"
               alt="Abdulla Al Mahin"
               fill
-              sizes="68px"
+              sizes="60px"
               className="object-cover"
               priority
             />
@@ -261,7 +238,7 @@ export default function Hero() {
         {/* ---- name ---- */}
         <span
           ref={nameRef}
-          className="mb-10 block text-[13px] font-medium tracking-[-0.01em] text-[var(--color-ink-secondary)]"
+          className="mb-8 block text-[12px] font-medium tracking-[-0.01em] text-[var(--color-ink-tertiary)]"
         >
           {NAME}
         </span>
@@ -273,7 +250,7 @@ export default function Hero() {
         >
           <h1
             data-reveal
-            className="text-[clamp(36px,5.5vw,58px)] font-medium leading-[0.95] tracking-[-0.045em] text-[var(--color-ink)]"
+            className="text-[clamp(34px,5vw,52px)] font-medium leading-[0.95] tracking-[-0.045em] text-[var(--color-ink)]"
           >
             {HEADLINE_LINE_1}
           </h1>
@@ -286,7 +263,7 @@ export default function Hero() {
         >
           <p
             data-reveal
-            className="text-[clamp(16px,2vw,22px)] font-normal leading-[1.3] tracking-[-0.02em] text-[var(--color-ink-tertiary)]"
+            className="text-[clamp(15px,1.8vw,20px)] font-normal leading-[1.3] tracking-[-0.015em] text-[var(--color-ink-tertiary)]"
           >
             {HEADLINE_LINE_2}
           </p>
@@ -295,7 +272,7 @@ export default function Hero() {
         {/* ---- description ---- */}
         <p
           ref={descRef}
-          className="mt-7 max-w-[480px] text-[15px] leading-[1.6] text-[var(--color-ink-secondary)]"
+          className="mt-6 max-w-[420px] text-[14px] leading-[1.6] text-[var(--color-ink-secondary)]"
         >
           {DESCRIPTION}
         </p>
@@ -303,29 +280,28 @@ export default function Hero() {
         {/* ---- ctas ---- */}
         <div
           ref={ctaRef}
-          className="mt-9 flex items-center gap-3"
+          className="mt-8 flex items-center gap-3"
         >
           <Link
             href={CTA_PRIMARY.href}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-primary)] px-5 py-2 text-[13px] font-medium text-[var(--color-primary-foreground)] shadow-[0_6px_16px_rgba(17,17,24,0.14)] transition-all duration-200 hover:bg-[var(--color-primary-hover)] hover:shadow-[0_8px_20px_rgba(17,17,24,0.18)] hover:-translate-y-px active:scale-[0.97]"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-primary)] px-5 py-2 text-[12px] font-medium text-[var(--color-primary-foreground)] shadow-[0_4px_14px_rgba(17,17,24,0.12)] transition-all duration-200 hover:bg-[var(--color-primary-hover)] hover:shadow-[0_6px_18px_rgba(17,17,24,0.16)] hover:-translate-y-px active:scale-[0.97]"
           >
             {CTA_PRIMARY.label}
-            <ArrowUpRight size={13} strokeWidth={2.2} />
+            <ArrowUpRight size={12} strokeWidth={2.2} />
           </Link>
 
           <Link
             href={CTA_SECONDARY.href}
-            className="inline-flex items-center gap-1 rounded-full px-4 py-2 text-[13px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
+            className="inline-flex items-center gap-1 rounded-full px-4 py-2 text-[12px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
           >
             {CTA_SECONDARY.label}
-            <ArrowUpRight size={12} strokeWidth={2} />
           </Link>
         </div>
 
         {/* ---- social ---- */}
         <div
           ref={socialRef}
-          className="mt-10 flex items-center gap-4"
+          className="mt-8 flex items-center gap-3.5"
         >
           {SOCIAL_LINKS.map((s) => (
             <a
@@ -336,20 +312,10 @@ export default function Hero() {
               aria-label={s.label}
               className="text-[var(--color-ink-muted)] transition-colors duration-200 hover:text-[var(--color-ink-secondary)]"
             >
-              <s.icon size={15} />
+              <s.icon size={14} />
             </a>
           ))}
         </div>
-      </div>
-
-      {/* ---- scroll indicator ---- */}
-      <div
-        ref={scrollRef}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <span className="block text-[11px] font-medium tracking-[0.06em] text-[var(--color-ink-muted)]">
-          ↓
-        </span>
       </div>
     </section>
   );

@@ -168,7 +168,7 @@ export default function About() {
         footer,
       ].filter(Boolean) as Element[];
 
-      gsap.set(targets, { opacity: 0, y: 16 });
+      gsap.set(targets, { opacity: 0, y: 14 });
 
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -177,12 +177,10 @@ export default function About() {
 
           const tl = gsap.timeline();
 
-          /* portrait first */
           if (portrait) {
             tl.to(portrait, { opacity: 1, y: 0, duration: 0.6, ease: EASE }, 0);
           }
 
-          /* content column */
           contentEls.forEach((el, i) => {
             tl.to(
               el,
@@ -191,7 +189,6 @@ export default function About() {
             );
           });
 
-          /* stack */
           if (stack) {
             const stackItems = Array.from(
               stack.querySelectorAll("[data-stack-item]"),
@@ -204,20 +201,19 @@ export default function About() {
             stackItems.forEach((item, i) => {
               tl.fromTo(
                 item,
-                { opacity: 0, y: 8, scale: 0.95 },
+                { opacity: 0, y: 6, scale: 0.96 },
                 {
                   opacity: 1,
                   y: 0,
                   scale: 1,
-                  duration: 0.35,
+                  duration: 0.3,
                   ease: EASE,
                 },
-                0.3 + i * 0.04,
+                0.3 + i * 0.03,
               );
             });
           }
 
-          /* experience header */
           if (expHeader) {
             tl.to(
               expHeader,
@@ -226,7 +222,6 @@ export default function About() {
             );
           }
 
-          /* experience rows */
           expRows.forEach((row, i) => {
             tl.to(
               row,
@@ -235,7 +230,6 @@ export default function About() {
             );
           });
 
-          /* footer */
           if (footer) {
             tl.to(footer, { opacity: 1, y: 0, duration: 0.4, ease: EASE }, 0.6);
           }
@@ -334,22 +328,22 @@ export default function About() {
       ref={sectionRef}
       id="about"
       aria-label="About"
-      className="mx-auto w-full max-w-[1060px] px-6 pb-[160px] pt-[140px] max-md:pb-[100px] max-md:pt-[80px]"
+      className="container-center section-space"
     >
-      <div className="flex gap-[80px] max-lg:flex-col max-lg:gap-12">
+      <div className="flex gap-[72px] max-lg:flex-col max-lg:gap-10">
         {/* ---- left: portrait ---- */}
-        <div className="w-[32%] shrink-0 max-lg:w-full">
+        <div className="w-[30%] shrink-0 max-lg:w-full">
           <div
             ref={portraitRef}
-            className="sticky top-28 inline-block rotate-[-2deg] rounded-2xl bg-[var(--color-surface)] p-3 max-lg:static max-lg:mx-auto max-lg:block max-lg:w-fit"
+            className="sticky top-28 inline-block rotate-[-2deg] rounded-2xl bg-[var(--color-surface)] p-2.5 max-lg:static max-lg:mx-auto max-lg:block max-lg:w-fit"
             style={{ boxShadow: "0 8px 24px rgb(61 59 92 / 0.06)" }}
           >
-            <div className="relative h-[280px] w-[240px] overflow-hidden rounded-xl max-md:h-[220px] max-md:w-[190px]">
+            <div className="relative h-[260px] w-[220px] overflow-hidden rounded-xl max-md:h-[200px] max-md:w-[170px]">
               <Image
                 src="/avater.jpeg"
                 alt="Abdulla Al Mahin"
                 fill
-                sizes="(max-width: 768px) 190px, 240px"
+                sizes="(max-width: 768px) 170px, 220px"
                 className="object-cover"
                 priority
               />
@@ -358,41 +352,41 @@ export default function About() {
         </div>
 
         {/* ---- right: content ---- */}
-        <div className="flex flex-1 flex-col gap-10 max-lg:w-full max-lg:gap-8">
+        <div className="flex flex-1 flex-col gap-8 max-lg:w-full max-lg:gap-7">
           {/* intro block */}
           <div ref={contentRef}>
-            <span className="mb-5 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
+            <span className="section-label">
               About
             </span>
 
-            <p className="mb-5 max-w-[540px] text-[22px] font-medium leading-[1.35] tracking-[-0.02em] text-[var(--color-ink)] max-md:text-[19px]">
+            <p className="mb-4 max-w-[520px] text-[20px] font-medium leading-[1.35] tracking-[-0.02em] text-[var(--color-ink)] max-md:text-[18px]">
               {INTRO_LEAD}
             </p>
 
-            <p className="max-w-[520px] text-[15px] leading-[1.65] text-[var(--color-ink-secondary)]">
+            <p className="max-w-[500px] text-[14px] leading-[1.65] text-[var(--color-ink-secondary)]">
               {INTRO_BODY}
             </p>
           </div>
 
-          {/* currently */}
+          {/* currently + stack */}
           <div ref={stackRef}>
-            <span className="mb-3 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
+            <span className="mb-2 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
               Currently
             </span>
-            <p className="mb-8 max-w-[460px] text-[14px] leading-[1.6] text-[var(--color-ink-secondary)]">
+            <p className="mb-6 max-w-[440px] text-[13px] leading-[1.6] text-[var(--color-ink-secondary)]">
               {CURRENTLY}
             </p>
 
             {/* stack */}
-            <span className="mb-3 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
+            <span className="mb-2 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
               My Stack
             </span>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {STACK.map((item) => (
                 <div
                   key={item.name}
                   data-stack-item
-                  className="flex h-[36px] items-center rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)] px-3 text-[12px] font-medium text-[var(--color-ink-secondary)]"
+                  className="flex h-[32px] items-center rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] px-2.5 text-[11px] font-medium text-[var(--color-ink-secondary)]"
                   style={{ boxShadow: "0 2px 6px rgb(61 59 92 / 0.03)" }}
                 >
                   {item.abbr ?? item.name}
@@ -403,25 +397,25 @@ export default function About() {
 
           {/* experience */}
           <div>
-            <div ref={expHeaderRef} className="mb-2">
-              <span className="mb-3 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
+            <div ref={expHeaderRef} className="mb-1">
+              <span className="mb-2 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
                 Experience
               </span>
             </div>
 
             <div ref={expListRef} className="flex flex-col">
-              {EXPERIENCE.map((exp, i) => (
+              {EXPERIENCE.map((exp) => (
                 <Link
                   key={`${exp.company}-${exp.period}`}
                   href={exp.href ?? "#"}
                   data-exp-row
-                  className="group flex items-start justify-between gap-6 border-t border-[var(--color-border-subtle)] py-6 text-left transition-colors duration-200 hover:bg-[var(--color-surface-hover)] max-md:flex-col max-md:gap-2 max-md:py-5"
+                  className="group flex items-start justify-between gap-5 border-t border-[var(--color-border-subtle)] py-5 text-left transition-colors duration-200 hover:bg-[var(--color-surface-hover)] max-md:flex-col max-md:gap-1.5 max-md:py-4"
                   aria-label={`${exp.role} at ${exp.company}`}
                 >
-                  <div className="flex flex-1 flex-col gap-1">
+                  <div className="flex flex-1 flex-col gap-0.5">
                     <span
                       data-exp-role
-                      className="text-[16px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] max-md:text-[15px]"
+                      className="text-[14px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] max-md:text-[13px]"
                     >
                       {exp.role}{" "}
                       <span className="text-[var(--color-ink-tertiary)]">
@@ -429,19 +423,19 @@ export default function About() {
                       </span>
                     </span>
                     {exp.description && (
-                      <span className="mt-1 max-w-[440px] text-[13px] leading-[1.55] text-[var(--color-ink-secondary)]">
+                      <span className="mt-0.5 max-w-[420px] text-[12px] leading-[1.55] text-[var(--color-ink-secondary)]">
                         {exp.description}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex shrink-0 items-center gap-3 max-md:mt-1">
-                    <span className="text-[12px] font-medium text-[var(--color-ink-muted)]">
+                  <div className="flex shrink-0 items-center gap-2.5 max-md:mt-0.5">
+                    <span className="text-[11px] font-medium text-[var(--color-ink-muted)]">
                       {exp.period}
                     </span>
                     <ArrowUpRight
                       data-exp-arrow
-                      size={13}
+                      size={12}
                       strokeWidth={2}
                       className="text-[var(--color-ink-muted)] transition-colors duration-200 group-hover:text-[var(--color-ink-secondary)]"
                     />
@@ -453,17 +447,17 @@ export default function About() {
           </div>
 
           {/* footer */}
-          <div ref={footerRef} className="pt-2">
-            <p className="mb-4 text-[14px] leading-[1.6] text-[var(--color-ink-tertiary)]">
+          <div ref={footerRef} className="pt-1">
+            <p className="mb-3 text-[13px] leading-[1.6] text-[var(--color-ink-tertiary)]">
               Open to thoughtful product work.
             </p>
             <Link
               href="mailto:mahin@example.com"
-              className="group inline-flex items-center gap-1.5 text-[13px] font-medium text-[var(--color-ink-secondary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
+              className="group inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--color-ink-secondary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
             >
               Let&apos;s work together
               <ArrowUpRight
-                size={13}
+                size={12}
                 strokeWidth={2}
                 className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               />

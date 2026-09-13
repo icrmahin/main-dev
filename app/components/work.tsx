@@ -132,54 +132,7 @@ export default function Work() {
     gsap.quickTo(preview, "y", { duration: PREVIEW.followDuration, ease: EASE })(y);
   }, []);
 
-  /* ---- entrance animation ---- */
-  useGSAP(
-    () => {
-      const reduced = prefersReducedMotion();
-
-      /* header */
-      const headerEls = headerRef.current
-        ? Array.from(headerRef.current.children)
-        : [];
-
-      /* project rows */
-      const rows = listRef.current
-        ? Array.from(listRef.current.querySelectorAll("[data-project-row]"))
-        : [];
-
-      const all = [...headerEls, ...rows];
-
-      if (reduced) {
-        gsap.set(all, { opacity: 1, y: 0 });
-        return;
-      }
-
-      gsap.set(all, { opacity: 0, y: 16 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      headerEls.forEach((el, i) => {
-        tl.to(el, { opacity: 1, y: 0, duration: 0.5, ease: EASE }, i * 0.08);
-      });
-
-      rows.forEach((el, i) => {
-        tl.to(
-          el,
-          { opacity: 1, y: 0, duration: 0.45, ease: EASE },
-          headerEls.length * 0.08 + i * 0.06,
-        );
-      });
-    },
-    { scope: sectionRef },
-  );
-
-  /* ---- scroll reveal via IntersectionObserver (no ScrollTrigger dependency) ---- */
+  /* ---- scroll reveal via IntersectionObserver ---- */
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
@@ -197,8 +150,7 @@ export default function Work() {
         : [];
       const all = [...headerEls, ...rows];
 
-      /* set initial hidden state */
-      gsap.set(all, { opacity: 0, y: 16 });
+      gsap.set(all, { opacity: 0, y: 14 });
 
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -317,19 +269,19 @@ export default function Work() {
       ref={sectionRef}
       id="work"
       aria-label="Selected work"
-      className="mx-auto w-full max-w-[1060px] px-6 pb-[160px] pt-[140px] max-md:pb-[100px] max-md:pt-[80px]"
+      className="container-center section-space"
     >
       {/* ---- header ---- */}
-      <div ref={headerRef} className="mb-16 max-md:mb-10">
-        <span className="mb-4 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
+      <div ref={headerRef} className="mb-12 max-md:mb-8">
+        <span className="section-label">
           Selected Work
         </span>
-        <h2 className="mb-4 text-[clamp(28px,4vw,42px)] font-medium leading-[1.1] tracking-[-0.035em] text-[var(--color-ink)]">
+        <h2 className="section-heading mb-3">
           Products I&apos;ve designed
           <br className="max-md:hidden" />{" "}
           <span className="text-[var(--color-ink-tertiary)]">and engineered.</span>
         </h2>
-        <p className="max-w-[460px] text-[15px] leading-[1.6] text-[var(--color-ink-secondary)]">
+        <p className="max-w-[440px] text-[14px] leading-[1.6] text-[var(--color-ink-secondary)]">
           A selection of projects spanning product engineering, interface design,
           frontend systems, and AI — built from concept through production.
         </p>
@@ -346,43 +298,43 @@ export default function Work() {
               if (el) rowRefs.current.set(project.id, el);
               else rowRefs.current.delete(project.id);
             }}
-            className="group flex items-start gap-6 border-t border-[var(--color-border-subtle)] py-7 text-left transition-colors duration-200 hover:bg-[var(--color-surface-hover)] max-md:flex-col max-md:gap-4 max-md:py-6"
+            className="group flex items-start gap-6 border-t border-[var(--color-border-subtle)] py-6 text-left transition-colors duration-200 hover:bg-[var(--color-surface-hover)] max-md:flex-col max-md:gap-3 max-md:py-5"
             aria-label={`${project.title} — ${project.category}`}
           >
             {/* number */}
             <span
               data-project-number
-              className="mt-0.5 w-10 shrink-0 text-[12px] font-medium tabular-nums text-[var(--color-ink-muted)] max-md:w-auto max-md:text-[11px]"
+              className="mt-0.5 w-10 shrink-0 text-[11px] font-medium tabular-nums text-[var(--color-ink-muted)] max-md:w-auto max-md:text-[10px]"
             >
               {project.number}
             </span>
 
             {/* content */}
-            <div className="flex flex-1 flex-col gap-1.5">
+            <div className="flex flex-1 flex-col gap-1">
               <h3
                 data-project-title
-                className="text-[22px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--color-ink)] transition-colors duration-200 group-hover:text-[var(--color-primary)] max-md:text-[18px]"
+                className="text-[20px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--color-ink)] transition-colors duration-200 group-hover:text-[var(--color-primary)] max-md:text-[17px]"
               >
                 {project.title}
               </h3>
               <p
                 data-project-desc
-                className="max-w-[480px] text-[14px] leading-[1.55] text-[var(--color-ink-secondary)] max-md:text-[13px]"
+                className="max-w-[460px] text-[13px] leading-[1.55] text-[var(--color-ink-secondary)] max-md:text-[12px]"
               >
                 {project.description}
               </p>
-              <span className="mt-1 text-[12px] font-medium text-[var(--color-ink-tertiary)]">
+              <span className="mt-0.5 text-[11px] font-medium text-[var(--color-ink-tertiary)]">
                 {project.category}
               </span>
             </div>
 
             {/* year + arrow */}
-            <div className="flex shrink-0 items-center gap-3 max-md:mt-1">
-              <span className="text-[12px] font-medium text-[var(--color-ink-muted)]">
+            <div className="flex shrink-0 items-center gap-2.5 max-md:mt-1">
+              <span className="text-[11px] font-medium text-[var(--color-ink-muted)]">
                 {project.year}
               </span>
               <ArrowUpRight
-                size={14}
+                size={13}
                 strokeWidth={2}
                 className="text-[var(--color-ink-muted)] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--color-ink-secondary)]"
               />
@@ -390,7 +342,7 @@ export default function Work() {
 
             {/* mobile inline image */}
             {project.image && (
-              <div className="mt-2 block w-full overflow-hidden rounded-2xl md:hidden">
+              <div className="mt-2 block w-full overflow-hidden rounded-xl md:hidden">
                 <Image
                   src={project.image}
                   alt={project.title}
@@ -408,14 +360,14 @@ export default function Work() {
       </div>
 
       {/* ---- concluding link ---- */}
-      <div className="mt-10 max-md:mt-8">
+      <div className="mt-8 max-md:mt-6">
         <Link
           href="#"
-          className="group inline-flex items-center gap-1.5 text-[13px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
+          className="group inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
         >
           View all work
           <ArrowUpRight
-            size={13}
+            size={12}
             strokeWidth={2}
             className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
           />
@@ -426,7 +378,7 @@ export default function Work() {
       <div
         ref={previewRef}
         aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 z-40 hidden overflow-hidden rounded-2xl opacity-0 shadow-[var(--shadow-float)] md:block"
+        className="pointer-events-none fixed top-0 left-0 z-40 hidden overflow-hidden rounded-xl opacity-0 shadow-[var(--shadow-float)] md:block"
         style={{
           width: PREVIEW.width,
           height: PREVIEW.height,

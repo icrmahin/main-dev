@@ -2,28 +2,20 @@
 
 /*
 ===============================================================================
-SOFT UI / NEUMORPHIC DESIGN SYSTEM
-===============================================================================
+DESIGN SYSTEM — Spatial Soft UI + Editorial Minimalism
 
 Visual direction:
-- Soft UI / modern neumorphism
-- Cool off-white canvas
-- White elevated surfaces
+- Clean white/near-white canvas
+- Soft elevated surfaces
 - Diffuse ambient shadows
 - Minimal borders
-- Dark high-contrast controls
-- Coral / violet / mint semantic accents
-- Large rounded geometry
-- No gradients
-- No glassmorphism
-- No backdrop blur
-
-Designed for:
-- Product interfaces
-- SaaS dashboards
-- Design systems
-- Creative tools
-- Portfolio/product-engineering interfaces
+- Dark neutral typography
+- Restrained secondary text
+- Soft rounded geometry
+- Center-weighted composition
+- Editorial typography hierarchy
+- No gradients, no glassmorphism, no backdrop blur
+- No excessive decoration
 
 ===============================================================================
 */
@@ -143,19 +135,6 @@ Designed for:
 
   /* --------------------------------------------------------------------------
      SPACING
-     --------------------------------------------------------------------------
-
-     Base system remains compatible with Tailwind.
-
-     1  = 4px
-     2  = 8px
-     3  = 12px
-     4  = 16px
-     5  = 20px
-     6  = 24px
-     8  = 32px
-     10 = 40px
-     12 = 48px
      -------------------------------------------------------------------------- */
 
   --spacing-1: 4px;
@@ -191,17 +170,6 @@ Designed for:
 
   /* --------------------------------------------------------------------------
      ELEVATION / SOFT SHADOWS
-     --------------------------------------------------------------------------
-
-     These are the most important tokens for the screenshot style.
-
-     Avoid:
-       box-shadow: 0 20px 50px black;
-
-     Prefer:
-       large blur
-       low opacity
-       cool neutral shadow color
      -------------------------------------------------------------------------- */
 
   --shadow-none: 0 0 transparent;
@@ -345,17 +313,66 @@ Designed for:
 
 
 /* ============================================================================
-   SOFT UI SURFACES
+   CONTAINER UTILITIES
    ========================================================================== */
 
 @layer utilities {
 
-  /*
-  Standard floating surface.
+  /* Centered content container — the primary layout anchor */
+  .container-center {
+    width: 100%;
+    max-width: 1060px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
 
-  Use:
-    className="soft-surface"
-  */
+  /* Section vertical spacing */
+  .section-space {
+    padding-top: 140px;
+    padding-bottom: 140px;
+  }
+
+  @media (max-width: 768px) {
+    .section-space {
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+  }
+
+  /* Section label — uppercase metadata line */
+  .section-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: 20px;
+  }
+
+  /* Section heading */
+  .section-heading {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    color: var(--color-ink);
+  }
+
+  /* Subtle surface — for cards, containers */
+  .surface-subtle {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+  }
+}
+
+
+/* ============================================================================
+   SOFT UI SURFACES
+   ========================================================================== */
+
+@layer utilities {
 
   .soft-surface {
     background: var(--color-surface);
@@ -363,11 +380,6 @@ Designed for:
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-float);
   }
-
-
-  /*
-  Smaller component surface.
-  */
 
   .soft-card {
     background: var(--color-surface);
@@ -381,17 +393,11 @@ Designed for:
       border-color var(--duration-normal) var(--ease-standard);
   }
 
-
   .soft-card:hover {
     border-color: var(--color-border);
     box-shadow: var(--shadow-lg);
     transform: translateY(-1px);
   }
-
-
-  /*
-  Strong floating element.
-  */
 
   .soft-floating {
     background: var(--color-surface);
@@ -404,16 +410,10 @@ Designed for:
       transform var(--duration-normal) var(--ease-soft);
   }
 
-
   .soft-floating:hover {
     box-shadow: var(--shadow-float-hover);
     transform: translateY(-2px);
   }
-
-
-  /*
-  Inset field / search box / input well.
-  */
 
   .soft-inset {
     background: var(--color-background-subtle);
@@ -421,11 +421,6 @@ Designed for:
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-inset);
   }
-
-
-  /*
-  Pill component.
-  */
 
   .soft-pill {
     display: inline-flex;
@@ -470,11 +465,9 @@ Designed for:
       transform var(--duration-fast) var(--ease-soft);
   }
 
-
   .soft-button:active {
     transform: scale(0.97);
   }
-
 
   .soft-button-primary {
     background: var(--color-primary);
@@ -485,7 +478,6 @@ Designed for:
       0 2px 5px rgb(17 17 24 / 0.08);
   }
 
-
   .soft-button-primary:hover {
     background: var(--color-primary-hover);
 
@@ -494,7 +486,6 @@ Designed for:
       0 3px 7px rgb(17 17 24 / 0.09);
   }
 
-
   .soft-button-secondary {
     background: var(--color-surface);
     color: var(--color-ink);
@@ -502,7 +493,6 @@ Designed for:
 
     box-shadow: var(--shadow-sm);
   }
-
 
   .soft-button-secondary:hover {
     background: var(--color-surface-hover);
@@ -539,18 +529,15 @@ Designed for:
       transform var(--duration-fast) var(--ease-soft);
   }
 
-
   .soft-icon-button:hover {
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
   }
 
-
   .soft-icon-button:active {
     transform: scale(0.94);
     box-shadow: var(--shadow-xs);
   }
-
 
   .soft-icon-button-dark {
     background: var(--color-primary);
@@ -592,16 +579,13 @@ Designed for:
       background-color var(--duration-fast) var(--ease-standard);
   }
 
-
   .soft-input::placeholder {
     color: var(--color-ink-muted);
   }
 
-
   .soft-input:hover {
     border-color: var(--color-border-strong);
   }
-
 
   .soft-input:focus {
     background: var(--color-surface);
@@ -634,36 +618,30 @@ Designed for:
     font-weight: 550;
   }
 
-
   .soft-badge-coral {
     background: var(--color-coral-soft);
     color: var(--color-coral-hover);
   }
-
 
   .soft-badge-violet {
     background: var(--color-violet-soft);
     color: var(--color-violet-hover);
   }
 
-
   .soft-badge-mint {
     background: var(--color-mint-soft);
     color: #159b70;
   }
-
 
   .soft-badge-success {
     background: var(--color-success-soft);
     color: #159b70;
   }
 
-
   .soft-badge-warning {
     background: var(--color-warning-soft);
     color: #b77618;
   }
-
 
   .soft-badge-danger {
     background: var(--color-danger-soft);
@@ -698,12 +676,10 @@ Designed for:
     box-shadow: var(--shadow-xs);
   }
 
-
   .soft-avatar-sm {
     width: 28px;
     height: 28px;
   }
-
 
   .soft-avatar-lg {
     width: 48px;
@@ -739,18 +715,15 @@ Designed for:
       background-color var(--duration-fast) var(--ease-standard);
   }
 
-
   .soft-interactive:hover {
     transform: translateY(-1px);
   }
-
 
   .soft-pressable {
     transition:
       transform var(--duration-fast) var(--ease-soft),
       box-shadow var(--duration-fast) var(--ease-soft);
   }
-
 
   .soft-pressable:active {
     transform: scale(0.97);

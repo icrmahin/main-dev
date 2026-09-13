@@ -31,13 +31,13 @@ const DEFAULT_ITEMS: readonly NavItem[] = [
 ] as const;
 
 /* ---------------------------------------------------------------------------
-   Animation constants — single source of truth for all timing
+   Animation constants
    --------------------------------------------------------------------------- */
 
 const ENTRANCE = { duration: 0.8, ease: "power3.out" as const, delay: 0.1 };
 const INDICATOR = { duration: 0.3, ease: "power2.out" as const };
 const HOVER_TEXT = { duration: 0.2, ease: "power2.out" as const };
-const SCROLL = { upY: -6, upOpacity: 0.8, duration: 0.35, ease: "power2.out" as const };
+const SCROLL = { upY: -6, upOpacity: 0.85, duration: 0.35, ease: "power2.out" as const };
 
 /* ---------------------------------------------------------------------------
    Helpers
@@ -91,7 +91,7 @@ export default function Navigation({
       }
       gsap.fromTo(
         navRef.current,
-        { opacity: 0, y: -12, scale: 0.96 },
+        { opacity: 0, y: -10, scale: 0.97 },
         { opacity: 1, y: 0, scale: 1, ...ENTRANCE },
       );
     },
@@ -111,7 +111,7 @@ export default function Navigation({
 
         const onEnter = () => {
           moveIndicator(href);
-          gsap.to(linkEl, { y: -1, ...HOVER_TEXT });
+          gsap.to(linkEl, { y: -0.5, ...HOVER_TEXT });
         };
         const onLeave = () => {
           gsap.to(linkEl, { y: 0, ...HOVER_TEXT });
@@ -145,17 +145,14 @@ export default function Navigation({
         const delta = scrollY - lastScroll;
         lastScroll = scrollY;
 
-        // At top of page: always fully visible
         if (scrollY < 20) {
           gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: SCROLL.ease });
           return;
         }
 
         if (delta > 2) {
-          // Scrolling down
           gsap.to(el, { y: SCROLL.upY, opacity: SCROLL.upOpacity, duration: SCROLL.duration, ease: SCROLL.ease });
         } else if (delta < -2) {
-          // Scrolling up
           gsap.to(el, { y: 0, opacity: 1, duration: SCROLL.duration, ease: SCROLL.ease });
         }
       };
@@ -171,18 +168,18 @@ export default function Navigation({
     <nav
       ref={navRef}
       aria-label="Main navigation"
-      className="fixed top-6 left-1/2 z-50 -translate-x-1/2"
+      className="fixed top-5 left-1/2 z-50 -translate-x-1/2"
     >
       <div
         ref={pillRef}
-        className="relative flex items-center rounded-full border border-[rgba(0,0,0,0.08)] bg-white px-1 py-[3px]"
-        style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.05)" }}
+        className="relative flex items-center rounded-full border border-[rgba(0,0,0,0.07)] bg-white/90 backdrop-blur-sm px-1 py-[3px]"
+        style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.02)" }}
       >
         {/* indicator */}
         <span
           ref={indicatorRef}
           aria-hidden="true"
-          className="pointer-events-none absolute top-[3px] bottom-[3px] left-0 z-0 rounded-full bg-[#f4f4f5] opacity-0"
+          className="pointer-events-none absolute top-[3px] bottom-[3px] left-0 z-0 rounded-full bg-[#f0f0f4] opacity-0"
         />
 
         {/* brand */}
@@ -193,7 +190,7 @@ export default function Navigation({
             if (el) itemRefs.current.set(brandHref, el);
             else itemRefs.current.delete(brandHref);
           }}
-          className="relative z-10 flex items-center px-3 text-[12px] font-medium tracking-[-0.01em] text-[#18181b] transition-colors hover:text-[#111118]"
+          className="relative z-10 flex items-center px-3 text-[12px] font-semibold tracking-[-0.01em] text-[#18181b] transition-colors hover:text-[#111118]"
         >
           {brand}
         </Link>
@@ -209,7 +206,7 @@ export default function Navigation({
                 if (el) itemRefs.current.set(item.href, el);
                 else itemRefs.current.delete(item.href);
               }}
-              className="relative z-10 flex items-center rounded-full px-3 py-1.5 text-[12px] font-medium tracking-[-0.01em] text-[#71717a] transition-colors hover:text-[#18181b]"
+              className="relative z-10 flex items-center rounded-full px-3 py-1.5 text-[12px] font-medium tracking-[-0.01em] text-[var(--color-ink-tertiary)] transition-colors hover:text-[var(--color-ink)]"
             >
               {item.label}
             </Link>
@@ -227,7 +224,7 @@ export default function Navigation({
                 if (el) itemRefs.current.set(item.href, el);
                 else itemRefs.current.delete(item.href);
               }}
-              className="relative z-10 flex items-center rounded-full px-2.5 py-1.5 text-[11px] font-medium tracking-[-0.01em] text-[#71717a] transition-colors hover:text-[#18181b]"
+              className="relative z-10 flex items-center rounded-full px-2.5 py-1.5 text-[11px] font-medium tracking-[-0.01em] text-[var(--color-ink-tertiary)] transition-colors hover:text-[var(--color-ink)]"
             >
               {item.label}
             </Link>
