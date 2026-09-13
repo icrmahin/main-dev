@@ -1,136 +1,163 @@
 @import "tailwindcss";
 
+/*
+===============================================================================
+SOFT UI / NEUMORPHIC DESIGN SYSTEM
+===============================================================================
+
+Visual direction:
+- Soft UI / modern neumorphism
+- Cool off-white canvas
+- White elevated surfaces
+- Diffuse ambient shadows
+- Minimal borders
+- Dark high-contrast controls
+- Coral / violet / mint semantic accents
+- Large rounded geometry
+- No gradients
+- No glassmorphism
+- No backdrop blur
+
+Designed for:
+- Product interfaces
+- SaaS dashboards
+- Design systems
+- Creative tools
+- Portfolio/product-engineering interfaces
+
+===============================================================================
+*/
+
+
 /* ============================================================================
-   APPLE DESIGN SYSTEM — LIGHT THEME ONLY
-   ----------------------------------------------------------------------------
-   Every token is declared in @theme, so it can be used two ways:
-
-   1) As a plain CSS variable      ->  var(--color-ink)
-   2) As a Tailwind utility        ->  bg-ink, text-ink, border-border
-
-   Which token names become which utilities (Tailwind 4):
-
-   --color-*    ->  color utilities    bg-accent, text-ink, border-border,
-                                        ring-focus, divide-border
-   --spacing-*  ->  spacing utilities  p-4, m-2, gap-6, w-8, h-12, size-6
-   --text-*     ->  type-size utils    text-body, text-title-3, text-caption-1
-   --radius-*   ->  rounded utilities  rounded-lg, rounded-full
-   --shadow-*   ->  shadow utilities   shadow-sm, shadow-lg
-
-   Design rules:
-   · Light theme only — warm neutrals, deep-indigo accent, teal secondary.
-   · No gradients, no dark mode, ever.
-   · The 4px / 8pt grid and the type, radius and shadow scales follow
-     Apple's Human Interface Guidelines.
-   ============================================================================ */
+   DESIGN TOKENS
+   ========================================================================== */
 
 @theme {
+
   /* --------------------------------------------------------------------------
-   · Colors — semantic tokens (the ones you should use day to day)
-   · ------------------------------------------------------------------------
-   · background          page background (warm ivory)
-   · surface             raised surfaces: cards, navigation, modals
-   · surface-sunken      inset wells, inboxed areas, disabled fills
-   · border              separators, outlines           (border-border)
-   · border-strong       stronger, high-emphasis borders (inputs, focus)
-   · ink                 primary text                  (text-ink)
-   · ink-secondary       secondary text / captions
-   · ink-tertiary        placeholders, disabled labels
-   · accent              brand color — buttons, links, active states
-   · accent-secondary    complementary teal — tags, secondary actions
-   · success/warning/danger/info — status colors
-   · focus / selection   focus rings and text-selection highlights
-   · scrim               overlay behind modals / popovers
-   -------------------------------------------------------------------------- */
-  --color-background: #f6f5f1;
+     COLOR SYSTEM
+     -------------------------------------------------------------------------- */
+
+  /* Canvas */
+  --color-background: #f7f7fb;
+  --color-background-subtle: #f2f2f7;
+  --color-background-muted: #ededf3;
+
+  /* Surfaces */
   --color-surface: #ffffff;
-  --color-surface-sunken: #ece9e2;
-  --color-border: #e2ded5;
-  --color-border-strong: #ccc5b8;
+  --color-surface-hover: #fdfdff;
+  --color-surface-active: #f8f8fc;
+  --color-surface-sunken: #eeeeF4;
 
-  --color-ink: #1c1917;
-  --color-ink-secondary: #57534e;
-  --color-ink-tertiary: #78716c;
-  --color-ink-on-accent: #ffffff;
+  /* Text */
+  --color-ink: #111118;
+  --color-ink-secondary: #4d4d58;
+  --color-ink-tertiary: #858591;
+  --color-ink-muted: #a5a5af;
+  --color-ink-on-dark: #ffffff;
 
-  --color-accent: #4f46e5;
-  --color-accent-hover: #4338ca;
-  --color-accent-secondary: #0f9488;
-  --color-accent-secondary-hover: #0d8177;
+  /* Borders */
+  --color-border: #e8e8ee;
+  --color-border-subtle: #eeeeF3;
+  --color-border-strong: #dcdce4;
 
-  --color-success: #34c759;
-  --color-warning: #ff9500;
-  --color-danger: #ff3b30;
-  --color-info: #32ade6;
+  /* Primary interaction */
+  --color-primary: #171720;
+  --color-primary-hover: #25252f;
+  --color-primary-active: #0d0d13;
+  --color-primary-foreground: #ffffff;
 
-  --color-focus: rgb(79 70 229 / 0.45);
-  --color-selection: #e0e7ff;
-  --color-scrim: rgb(28 25 23 / 0.36);
+  /* Accent */
+  --color-coral: #ff6257;
+  --color-coral-soft: #fff0ee;
+  --color-coral-hover: #f45146;
+
+  --color-violet: #7770e8;
+  --color-violet-soft: #efeeff;
+  --color-violet-hover: #6861d9;
+
+  --color-mint: #27d59a;
+  --color-mint-soft: #e9fbf5;
+  --color-mint-hover: #20c98f;
+
+  /* Semantic */
+  --color-success: #27c993;
+  --color-success-soft: #e9fbf5;
+
+  --color-warning: #f3a83b;
+  --color-warning-soft: #fff6e8;
+
+  --color-danger: #ef5b5b;
+  --color-danger-soft: #ffeded;
+
+  --color-info: #5d8df5;
+  --color-info-soft: #edf3ff;
+
+  /* Focus / selection */
+  --color-focus: rgb(119 112 232 / 0.32);
+  --color-selection: #e5e3ff;
+
 
   /* --------------------------------------------------------------------------
-   · Colors — Apple system palette (light mode)
-   · ------------------------------------------------------------------------
-   · Always available when you need an exact Apple color.
-   · Prefer the semantic tokens above for consistency.
-   -------------------------------------------------------------------------- */
-  --color-apple-red: #ff3b30;
-  --color-apple-orange: #ff9500;
-  --color-apple-yellow: #ffcc00;
-  --color-apple-green: #34c759;
-  --color-apple-mint: #00c7be;
-  --color-apple-teal: #30b0c7;
-  --color-apple-cyan: #32ade6;
-  --color-apple-blue: #007aff;
-  --color-apple-indigo: #5856d6;
-  --color-apple-purple: #af52de;
-  --color-apple-pink: #ff2d55;
-  --color-apple-brown: #a2845e;
+     TYPOGRAPHY
+     -------------------------------------------------------------------------- */
 
-  --color-apple-gray: #8e8e93;
-  --color-apple-gray-2: #aeaeb2;
-  --color-apple-gray-3: #c7c7cc;
-  --color-apple-gray-4: #d1d1d6;
-  --color-apple-gray-5: #e5e5ea;
-  --color-apple-gray-6: #f2f2f7;
+  --text-display: 48px;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.04em;
+  --text-display--font-weight: 650;
 
-  /* --------------------------------------------------------------------------
-   · Typography — Apple SF type scale
-   · ------------------------------------------------------------------------
-   · Usage: text-body, text-title-3, text-caption-1, ...
-   · Large titles for hero sections, Titles for section headers,
-   · Headline/Body for reading text, Captions/Footnote for meta content.
-   -------------------------------------------------------------------------- */
-  --text-large-title: 34px;
-  --text-large-title--line-height: 41px;
-  --text-title-1: 28px;
-  --text-title-1--line-height: 34px;
-  --text-title-2: 22px;
-  --text-title-2--line-height: 28px;
+  --text-title-1: 32px;
+  --text-title-1--line-height: 1.15;
+  --text-title-1--letter-spacing: -0.03em;
+  --text-title-1--font-weight: 650;
+
+  --text-title-2: 24px;
+  --text-title-2--line-height: 1.2;
+  --text-title-2--letter-spacing: -0.025em;
+  --text-title-2--font-weight: 650;
+
   --text-title-3: 20px;
-  --text-title-3--line-height: 25px;
+  --text-title-3--line-height: 1.25;
+  --text-title-3--letter-spacing: -0.02em;
+  --text-title-3--font-weight: 600;
 
   --text-headline: 17px;
-  --text-headline--line-height: 22px;
-  --text-body: 17px;
-  --text-body--line-height: 22px;
-  --text-callout: 16px;
-  --text-callout--line-height: 21px;
-  --text-subheadline: 15px;
-  --text-subheadline--line-height: 20px;
+  --text-headline--line-height: 1.35;
+  --text-headline--font-weight: 600;
 
-  --text-footnote: 13px;
-  --text-footnote--line-height: 18px;
-  --text-caption-1: 12px;
-  --text-caption-1--line-height: 16px;
-  --text-caption-2: 11px;
-  --text-caption-2--line-height: 13px;
+  --text-body: 15px;
+  --text-body--line-height: 1.5;
+  --text-body--font-weight: 400;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.45;
+
+  --text-caption: 12px;
+  --text-caption--line-height: 1.35;
+
+  --text-micro: 11px;
+  --text-micro--line-height: 1.2;
+
 
   /* --------------------------------------------------------------------------
-   · Spacing — Apple 8pt grid (half-steps at 4pt where needed)
-   · ------------------------------------------------------------------------
-   · The number is the rem value: 1 unit = 8px, 2 units = 16px, ...
-   · Padding  p-4  | Margin  m-6  | Gaps  gap-2  | Widths  w-20  | Icons  size-6
-   -------------------------------------------------------------------------- */
+     SPACING
+     --------------------------------------------------------------------------
+
+     Base system remains compatible with Tailwind.
+
+     1  = 4px
+     2  = 8px
+     3  = 12px
+     4  = 16px
+     5  = 20px
+     6  = 24px
+     8  = 32px
+     10 = 40px
+     12 = 48px
+     -------------------------------------------------------------------------- */
+
   --spacing-1: 4px;
   --spacing-2: 8px;
   --spacing-3: 12px;
@@ -139,79 +166,610 @@
   --spacing-6: 24px;
   --spacing-7: 28px;
   --spacing-8: 32px;
-  --spacing-9: 36px;
   --spacing-10: 40px;
-  --spacing-11: 44px;
   --spacing-12: 48px;
   --spacing-14: 56px;
   --spacing-16: 64px;
-  --spacing-18: 72px;
   --spacing-20: 80px;
   --spacing-24: 96px;
-  --spacing-28: 112px;
   --spacing-32: 128px;
-  --spacing-40: 160px;
-  --spacing-48: 192px;
-  --spacing-56: 224px;
-  --spacing-64: 256px;
+
 
   /* --------------------------------------------------------------------------
-   · Radii — Apple corner-radius presets (Human Interface Guidelines)
-   · ------------------------------------------------------------------------
-   · xs 6px  tiny inlays   | sm 10px  small controls
-   · md 14px buttons/fields| lg 16px cards
-   · xl 21px sheets        | 2xl 30px large cards
-   · full pills, badges, avatars
-   -------------------------------------------------------------------------- */
-  --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 16px;
-  --radius-xl: 21px;
-  --radius-2xl: 30px;
+     RADII
+     -------------------------------------------------------------------------- */
+
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 28px;
+  --radius-3xl: 32px;
   --radius-full: 9999px;
 
+
   /* --------------------------------------------------------------------------
-   · Shadows — soft, warm, layered (materials feel, not drop-shadow)
-   -------------------------------------------------------------------------- */
-  --shadow-none: 0 0 #0000;
-  --shadow-xs: 0 1px 2px rgb(28 25 23 / 0.05);
-  --shadow-sm: 0 1px 3px rgb(28 25 23 / 0.06), 0 1px 2px -1px rgb(28 25 23 / 0.05);
-  --shadow-md: 0 10px 15px -3px rgb(28 25 23 / 0.08), 0 4px 6px -4px rgb(28 25 23 / 0.05);
-  --shadow-lg: 0 20px 25px -5px rgb(28 25 23 / 0.1), 0 8px 10px -6px rgb(28 25 23 / 0.06);
-  --shadow-xl: 0 25px 50px -12px rgb(28 25 23 / 0.18);
+     ELEVATION / SOFT SHADOWS
+     --------------------------------------------------------------------------
+
+     These are the most important tokens for the screenshot style.
+
+     Avoid:
+       box-shadow: 0 20px 50px black;
+
+     Prefer:
+       large blur
+       low opacity
+       cool neutral shadow color
+     -------------------------------------------------------------------------- */
+
+  --shadow-none: 0 0 transparent;
+
+  --shadow-xs:
+    0 2px 6px rgb(61 59 92 / 0.05);
+
+  --shadow-sm:
+    0 4px 12px rgb(61 59 92 / 0.06),
+    0 1px 3px rgb(61 59 92 / 0.04);
+
+  --shadow-md:
+    0 10px 24px rgb(61 59 92 / 0.08),
+    0 3px 8px rgb(61 59 92 / 0.04);
+
+  --shadow-lg:
+    0 18px 40px rgb(61 59 92 / 0.10),
+    0 5px 12px rgb(61 59 92 / 0.04);
+
+  --shadow-xl:
+    0 28px 64px rgb(61 59 92 / 0.13),
+    0 8px 20px rgb(61 59 92 / 0.05);
+
+  /* Screenshot-style floating component */
+  --shadow-float:
+    0 24px 50px rgb(76 74 110 / 0.11),
+    0 8px 20px rgb(76 74 110 / 0.05);
+
+  /* Hover elevation */
+  --shadow-float-hover:
+    0 30px 64px rgb(76 74 110 / 0.15),
+    0 10px 24px rgb(76 74 110 / 0.06);
+
+  /* Pressed / inset surface */
+  --shadow-inset:
+    inset 0 1px 2px rgb(61 59 92 / 0.06),
+    inset 0 -1px 1px rgb(255 255 255 / 0.8);
+
+
+  /* --------------------------------------------------------------------------
+     MOTION
+     -------------------------------------------------------------------------- */
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --duration-fast: 120ms;
+  --duration-normal: 180ms;
+  --duration-slow: 280ms;
 }
 
-/* ----------------------------------------------------------------------------
-   Runtime defaults — wired to the actual fonts loaded in app/layout.tsx.
-   @theme inline lets utilities reference variables set at runtime on <html>.
-   ---------------------------------------------------------------------------- */
+
+/* ============================================================================
+   RUNTIME FONT TOKENS
+   ========================================================================== */
+
 @theme inline {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", SFMono-Regular,
-    Menlo, monospace;
+
+  --font-sans:
+    var(--font-geist-sans),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  --font-mono:
+    var(--font-geist-mono),
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
 
   --default-font-family: var(--font-sans);
   --default-mono-font-family: var(--font-mono);
   --default-border-color: var(--color-border);
 }
 
-/* ----------------------------------------------------------------------------
-   Base styles — keep the app light-only and use the design tokens.
-   ---------------------------------------------------------------------------- */
+
+/* ============================================================================
+   BASE
+   ========================================================================== */
+
 @layer base {
+
   :root {
     color-scheme: light;
-    accent-color: var(--color-accent);
+    accent-color: var(--color-violet);
+  }
+
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    background: var(--color-background);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    background-color: var(--color-background);
+    margin: 0;
+    min-height: 100vh;
+
+    background: var(--color-background);
     color: var(--color-ink);
+
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.5;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button {
+    cursor: pointer;
   }
 
   ::selection {
-    background-color: var(--color-selection);
+    background: var(--color-selection);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-violet);
+    outline-offset: 3px;
+  }
+}
+
+
+/* ============================================================================
+   SOFT UI SURFACES
+   ========================================================================== */
+
+@layer utilities {
+
+  /*
+  Standard floating surface.
+
+  Use:
+    className="soft-surface"
+  */
+
+  .soft-surface {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-float);
+  }
+
+
+  /*
+  Smaller component surface.
+  */
+
+  .soft-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+
+    transition:
+      box-shadow var(--duration-normal) var(--ease-soft),
+      transform var(--duration-normal) var(--ease-soft),
+      border-color var(--duration-normal) var(--ease-standard);
+  }
+
+
+  .soft-card:hover {
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+  }
+
+
+  /*
+  Strong floating element.
+  */
+
+  .soft-floating {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-float);
+
+    transition:
+      box-shadow var(--duration-normal) var(--ease-soft),
+      transform var(--duration-normal) var(--ease-soft);
+  }
+
+
+  .soft-floating:hover {
+    box-shadow: var(--shadow-float-hover);
+    transform: translateY(-2px);
+  }
+
+
+  /*
+  Inset field / search box / input well.
+  */
+
+  .soft-inset {
+    background: var(--color-background-subtle);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-inset);
+  }
+
+
+  /*
+  Pill component.
+  */
+
+  .soft-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-full);
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+
+/* ============================================================================
+   BUTTON SYSTEM
+   ========================================================================== */
+
+@layer utilities {
+
+  .soft-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 40px;
+    padding-inline: 16px;
+
+    border: 1px solid transparent;
+    border-radius: var(--radius-full);
+
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1;
+
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-soft),
+      transform var(--duration-fast) var(--ease-soft);
+  }
+
+
+  .soft-button:active {
+    transform: scale(0.97);
+  }
+
+
+  .soft-button-primary {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+
+    box-shadow:
+      0 6px 16px rgb(17 17 24 / 0.16),
+      0 2px 5px rgb(17 17 24 / 0.08);
+  }
+
+
+  .soft-button-primary:hover {
+    background: var(--color-primary-hover);
+
+    box-shadow:
+      0 8px 20px rgb(17 17 24 / 0.19),
+      0 3px 7px rgb(17 17 24 / 0.09);
+  }
+
+
+  .soft-button-secondary {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    border-color: var(--color-border);
+
+    box-shadow: var(--shadow-sm);
+  }
+
+
+  .soft-button-secondary:hover {
+    background: var(--color-surface-hover);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+
+/* ============================================================================
+   ICON BUTTON
+   ========================================================================== */
+
+@layer utilities {
+
+  .soft-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: var(--radius-full);
+
+    background: var(--color-surface);
+    color: var(--color-ink);
+
+    border: 1px solid var(--color-border-subtle);
+    box-shadow: var(--shadow-sm);
+
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-soft),
+      transform var(--duration-fast) var(--ease-soft);
+  }
+
+
+  .soft-icon-button:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+
+  .soft-icon-button:active {
+    transform: scale(0.94);
+    box-shadow: var(--shadow-xs);
+  }
+
+
+  .soft-icon-button-dark {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    border-color: transparent;
+
+    box-shadow:
+      0 8px 20px rgb(17 17 24 / 0.16);
+  }
+}
+
+
+/* ============================================================================
+   INPUTS
+   ========================================================================== */
+
+@layer utilities {
+
+  .soft-input {
+    width: 100%;
+    min-height: 42px;
+
+    padding-inline: 14px;
+
+    background: var(--color-surface);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    color: var(--color-ink);
+
+    box-shadow: var(--shadow-xs);
+
+    outline: none;
+
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-soft),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+
+  .soft-input::placeholder {
+    color: var(--color-ink-muted);
+  }
+
+
+  .soft-input:hover {
+    border-color: var(--color-border-strong);
+  }
+
+
+  .soft-input:focus {
+    background: var(--color-surface);
+    border-color: var(--color-violet);
+
+    box-shadow:
+      0 0 0 3px var(--color-focus),
+      var(--shadow-sm);
+  }
+}
+
+
+/* ============================================================================
+   BADGES / STATUS
+   ========================================================================== */
+
+@layer utilities {
+
+  .soft-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    min-height: 26px;
+    padding-inline: 9px;
+
+    border-radius: var(--radius-full);
+
+    font-size: 12px;
+    font-weight: 550;
+  }
+
+
+  .soft-badge-coral {
+    background: var(--color-coral-soft);
+    color: var(--color-coral-hover);
+  }
+
+
+  .soft-badge-violet {
+    background: var(--color-violet-soft);
+    color: var(--color-violet-hover);
+  }
+
+
+  .soft-badge-mint {
+    background: var(--color-mint-soft);
+    color: #159b70;
+  }
+
+
+  .soft-badge-success {
+    background: var(--color-success-soft);
+    color: #159b70;
+  }
+
+
+  .soft-badge-warning {
+    background: var(--color-warning-soft);
+    color: #b77618;
+  }
+
+
+  .soft-badge-danger {
+    background: var(--color-danger-soft);
+    color: #c94444;
+  }
+}
+
+
+/* ============================================================================
+   AVATAR
+   ========================================================================== */
+
+@layer utilities {
+
+  .soft-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    overflow: hidden;
+
+    border-radius: var(--radius-full);
+
+    background: var(--color-background-muted);
+    color: var(--color-ink);
+
+    border: 2px solid var(--color-surface);
+
+    box-shadow: var(--shadow-xs);
+  }
+
+
+  .soft-avatar-sm {
+    width: 28px;
+    height: 28px;
+  }
+
+
+  .soft-avatar-lg {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+
+/* ============================================================================
+   DIVIDERS
+   ========================================================================== */
+
+@layer utilities {
+
+  .soft-divider {
+    height: 1px;
+    width: 100%;
+    background: var(--color-border-subtle);
+  }
+}
+
+
+/* ============================================================================
+   INTERACTION HELPERS
+   ========================================================================== */
+
+@layer utilities {
+
+  .soft-interactive {
+    transition:
+      transform var(--duration-normal) var(--ease-soft),
+      box-shadow var(--duration-normal) var(--ease-soft),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+
+  .soft-interactive:hover {
+    transform: translateY(-1px);
+  }
+
+
+  .soft-pressable {
+    transition:
+      transform var(--duration-fast) var(--ease-soft),
+      box-shadow var(--duration-fast) var(--ease-soft);
+  }
+
+
+  .soft-pressable:active {
+    transform: scale(0.97);
+  }
+}
+
+
+/* ============================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
