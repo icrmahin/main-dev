@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   APPLE DESIGN SYSTEM — LIGHT THEME ONLY
+   ----------------------------------------------------------------------------
+   Every token is declared in @theme, so it can be used two ways:
+
+   1) As a plain CSS variable      ->  var(--color-ink)
+   2) As a Tailwind utility        ->  bg-ink, text-ink, border-border
+
+   Which token names become which utilities (Tailwind 4):
+
+   --color-*    ->  color utilities    bg-accent, text-ink, border-border,
+                                        ring-focus, divide-border
+   --spacing-*  ->  spacing utilities  p-4, m-2, gap-6, w-8, h-12, size-6
+   --text-*     ->  type-size utils    text-body, text-title-3, text-caption-1
+   --radius-*   ->  rounded utilities  rounded-lg, rounded-full
+   --shadow-*   ->  shadow utilities   shadow-sm, shadow-lg
+
+   Design rules:
+   · Light theme only — warm neutrals, deep-indigo accent, teal secondary.
+   · No gradients, no dark mode, ever.
+   · The 4px / 8pt grid and the type, radius and shadow scales follow
+     Apple's Human Interface Guidelines.
+   ============================================================================ */
+
+@theme {
+  /* --------------------------------------------------------------------------
+   · Colors — semantic tokens (the ones you should use day to day)
+   · ------------------------------------------------------------------------
+   · background          page background (warm ivory)
+   · surface             raised surfaces: cards, navigation, modals
+   · surface-sunken      inset wells, inboxed areas, disabled fills
+   · border              separators, outlines           (border-border)
+   · border-strong       stronger, high-emphasis borders (inputs, focus)
+   · ink                 primary text                  (text-ink)
+   · ink-secondary       secondary text / captions
+   · ink-tertiary        placeholders, disabled labels
+   · accent              brand color — buttons, links, active states
+   · accent-secondary    complementary teal — tags, secondary actions
+   · success/warning/danger/info — status colors
+   · focus / selection   focus rings and text-selection highlights
+   · scrim               overlay behind modals / popovers
+   -------------------------------------------------------------------------- */
+  --color-background: #f6f5f1;
+  --color-surface: #ffffff;
+  --color-surface-sunken: #ece9e2;
+  --color-border: #e2ded5;
+  --color-border-strong: #ccc5b8;
+
+  --color-ink: #1c1917;
+  --color-ink-secondary: #57534e;
+  --color-ink-tertiary: #78716c;
+  --color-ink-on-accent: #ffffff;
+
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-accent-secondary: #0f9488;
+  --color-accent-secondary-hover: #0d8177;
+
+  --color-success: #34c759;
+  --color-warning: #ff9500;
+  --color-danger: #ff3b30;
+  --color-info: #32ade6;
+
+  --color-focus: rgb(79 70 229 / 0.45);
+  --color-selection: #e0e7ff;
+  --color-scrim: rgb(28 25 23 / 0.36);
+
+  /* --------------------------------------------------------------------------
+   · Colors — Apple system palette (light mode)
+   · ------------------------------------------------------------------------
+   · Always available when you need an exact Apple color.
+   · Prefer the semantic tokens above for consistency.
+   -------------------------------------------------------------------------- */
+  --color-apple-red: #ff3b30;
+  --color-apple-orange: #ff9500;
+  --color-apple-yellow: #ffcc00;
+  --color-apple-green: #34c759;
+  --color-apple-mint: #00c7be;
+  --color-apple-teal: #30b0c7;
+  --color-apple-cyan: #32ade6;
+  --color-apple-blue: #007aff;
+  --color-apple-indigo: #5856d6;
+  --color-apple-purple: #af52de;
+  --color-apple-pink: #ff2d55;
+  --color-apple-brown: #a2845e;
+
+  --color-apple-gray: #8e8e93;
+  --color-apple-gray-2: #aeaeb2;
+  --color-apple-gray-3: #c7c7cc;
+  --color-apple-gray-4: #d1d1d6;
+  --color-apple-gray-5: #e5e5ea;
+  --color-apple-gray-6: #f2f2f7;
+
+  /* --------------------------------------------------------------------------
+   · Typography — Apple SF type scale
+   · ------------------------------------------------------------------------
+   · Usage: text-body, text-title-3, text-caption-1, ...
+   · Large titles for hero sections, Titles for section headers,
+   · Headline/Body for reading text, Captions/Footnote for meta content.
+   -------------------------------------------------------------------------- */
+  --text-large-title: 34px;
+  --text-large-title--line-height: 41px;
+  --text-title-1: 28px;
+  --text-title-1--line-height: 34px;
+  --text-title-2: 22px;
+  --text-title-2--line-height: 28px;
+  --text-title-3: 20px;
+  --text-title-3--line-height: 25px;
+
+  --text-headline: 17px;
+  --text-headline--line-height: 22px;
+  --text-body: 17px;
+  --text-body--line-height: 22px;
+  --text-callout: 16px;
+  --text-callout--line-height: 21px;
+  --text-subheadline: 15px;
+  --text-subheadline--line-height: 20px;
+
+  --text-footnote: 13px;
+  --text-footnote--line-height: 18px;
+  --text-caption-1: 12px;
+  --text-caption-1--line-height: 16px;
+  --text-caption-2: 11px;
+  --text-caption-2--line-height: 13px;
+
+  /* --------------------------------------------------------------------------
+   · Spacing — Apple 8pt grid (half-steps at 4pt where needed)
+   · ------------------------------------------------------------------------
+   · The number is the rem value: 1 unit = 8px, 2 units = 16px, ...
+   · Padding  p-4  | Margin  m-6  | Gaps  gap-2  | Widths  w-20  | Icons  size-6
+   -------------------------------------------------------------------------- */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --spacing-9: 36px;
+  --spacing-10: 40px;
+  --spacing-11: 44px;
+  --spacing-12: 48px;
+  --spacing-14: 56px;
+  --spacing-16: 64px;
+  --spacing-18: 72px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-28: 112px;
+  --spacing-32: 128px;
+  --spacing-40: 160px;
+  --spacing-48: 192px;
+  --spacing-56: 224px;
+  --spacing-64: 256px;
+
+  /* --------------------------------------------------------------------------
+   · Radii — Apple corner-radius presets (Human Interface Guidelines)
+   · ------------------------------------------------------------------------
+   · xs 6px  tiny inlays   | sm 10px  small controls
+   · md 14px buttons/fields| lg 16px cards
+   · xl 21px sheets        | 2xl 30px large cards
+   · full pills, badges, avatars
+   -------------------------------------------------------------------------- */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 16px;
+  --radius-xl: 21px;
+  --radius-2xl: 30px;
+  --radius-full: 9999px;
+
+  /* --------------------------------------------------------------------------
+   · Shadows — soft, warm, layered (materials feel, not drop-shadow)
+   -------------------------------------------------------------------------- */
+  --shadow-none: 0 0 #0000;
+  --shadow-xs: 0 1px 2px rgb(28 25 23 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(28 25 23 / 0.06), 0 1px 2px -1px rgb(28 25 23 / 0.05);
+  --shadow-md: 0 10px 15px -3px rgb(28 25 23 / 0.08), 0 4px 6px -4px rgb(28 25 23 / 0.05);
+  --shadow-lg: 0 20px 25px -5px rgb(28 25 23 / 0.1), 0 8px 10px -6px rgb(28 25 23 / 0.06);
+  --shadow-xl: 0 25px 50px -12px rgb(28 25 23 / 0.18);
+}
+
+/* ----------------------------------------------------------------------------
+   Runtime defaults — wired to the actual fonts loaded in app/layout.tsx.
+   @theme inline lets utilities reference variables set at runtime on <html>.
+   ---------------------------------------------------------------------------- */
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", SFMono-Regular,
+    Menlo, monospace;
+
+  --default-font-family: var(--font-sans);
+  --default-mono-font-family: var(--font-mono);
+  --default-border-color: var(--color-border);
+}
+
+/* ----------------------------------------------------------------------------
+   Base styles — keep the app light-only and use the design tokens.
+   ---------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    color-scheme: light;
+    accent-color: var(--color-accent);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-ink);
+  }
+
+  ::selection {
+    background-color: var(--color-selection);
+  }
+}
