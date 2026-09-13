@@ -171,7 +171,7 @@ export default function Navigation({
     <nav
       ref={navRef}
       aria-label="Main navigation"
-      className="fixed top-6 left-1/2 z-50 -translate-x-1/2 opacity-0"
+      className="fixed top-6 left-1/2 z-50 -translate-x-1/2"
     >
       <div
         ref={pillRef}
