@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import Image from "next/image";
+import { useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -75,16 +74,6 @@ const PROJECTS: readonly Project[] = [
 
 const EASE = "power3.out" as const;
 
-const PREVIEW = {
-  width: 320,
-  height: 210,
-  offsetX: 20,
-  offsetY: 20,
-  followDuration: 0.4,
-  enterDuration: 0.35,
-  leaveDuration: 0.25,
-};
-
 /* ---------------------------------------------------------------------------
    Helpers
    --------------------------------------------------------------------------- */
@@ -101,36 +90,7 @@ function prefersReducedMotion(): boolean {
 export default function Work() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const previewImgRef = useRef<HTMLImageElement>(null);
-
-  const rowRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
-  const [activePreview, setActivePreview] = useState<{
-    src: string;
-    alt: string;
-  } | null>(null);
-
-  /* ---- floating preview positioning ---- */
-  const positionPreview = useCallback((e: MouseEvent) => {
-    const preview = previewRef.current;
-    if (!preview) return;
-
-    const { width, height, offsetX, offsetY } = PREVIEW;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-
-    let x = e.clientX + offsetX;
-    let y = e.clientY + offsetY;
-
-    if (x + width > vw - 16) x = e.clientX - width - offsetX;
-    if (y + height > vh - 16) y = e.clientY - height - offsetY;
-    if (x < 16) x = 16;
-    if (y < 16) y = 16;
-
-    gsap.quickTo(preview, "x", { duration: PREVIEW.followDuration, ease: EASE })(x);
-    gsap.quickTo(preview, "y", { duration: PREVIEW.followDuration, ease: EASE })(y);
-  }, []);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   /* ---- scroll reveal via IntersectionObserver ---- */
   useGSAP(
@@ -145,12 +105,12 @@ export default function Work() {
       const headerEls = headerRef.current
         ? Array.from(headerRef.current.children)
         : [];
-      const rows = listRef.current
-        ? Array.from(listRef.current.querySelectorAll("[data-project-row]"))
+      const cards = gridRef.current
+        ? Array.from(gridRef.current.querySelectorAll("[data-project-card]"))
         : [];
-      const all = [...headerEls, ...rows];
+      const all = [...headerEls, ...cards];
 
-      gsap.set(all, { opacity: 0, y: 14 });
+      gsap.set(all, { opacity: 0, y: 16 });
 
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -158,14 +118,16 @@ export default function Work() {
           revealed = true;
 
           const tl = gsap.timeline();
+
           headerEls.forEach((el, i) => {
             tl.to(el, { opacity: 1, y: 0, duration: 0.5, ease: EASE }, i * 0.08);
           });
-          rows.forEach((el, i) => {
+
+          cards.forEach((el, i) => {
             tl.to(
               el,
-              { opacity: 1, y: 0, duration: 0.45, ease: EASE },
-              headerEls.length * 0.08 + i * 0.06,
+              { opacity: 1, y: 0, duration: 0.6, ease: EASE },
+              headerEls.length * 0.08 + i * 0.08,
             );
           });
 
@@ -180,87 +142,81 @@ export default function Work() {
     { scope: sectionRef },
   );
 
-  /* ---- project row hover ---- */
+  /* ---- card hover interactions ---- */
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
+      const grid = gridRef.current;
+      if (!grid) return;
 
       const cleanups: Array<() => void> = [];
+      const cards = grid.querySelectorAll("[data-project-card]");
 
-      PROJECTS.forEach((project) => {
-        const row = rowRefs.current.get(project.id);
-        if (!row) return;
+      cards.forEach((card) => {
+        const img = card.querySelector("[data-card-image]");
+        const arrow = card.querySelector("[data-card-arrow]");
+        const title = card.querySelector("[data-card-title]");
 
-        const number = row.querySelector("[data-project-number]");
-        const title = row.querySelector("[data-project-title]");
-        const desc = row.querySelector("[data-project-desc]");
-
-        const onEnter = (e: MouseEvent) => {
-          if (number) gsap.to(number, { x: 3, duration: 0.25, ease: EASE });
-          if (title) gsap.to(title, { y: -1, duration: 0.2, ease: EASE });
-          if (desc) gsap.to(desc, { opacity: 0.8, duration: 0.2, ease: EASE });
-
-          if (project.image) {
-            setActivePreview({ src: project.image, alt: project.title });
-            const preview = previewRef.current;
-            if (preview) {
-              gsap.fromTo(
-                preview,
-                { opacity: 0, scale: 0.96 },
-                { opacity: 1, scale: 1, duration: PREVIEW.enterDuration, ease: EASE },
-              );
+        const onEnter = () => {
+          /* image scale */
+          if (img) gsap.to(img, { scale: 1.018, duration: 0.6, ease: EASE });
+          /* card rise */
+          gsap.to(card, { y: -2, duration: 0.35, ease: EASE });
+          /* arrow move */
+          if (arrow) gsap.to(arrow, { x: 4, duration: 0.3, ease: EASE });
+          /* title shift */
+          if (title) gsap.to(title, { x: 1, duration: 0.3, ease: EASE });
+          /* dim siblings */
+          cards.forEach((sibling) => {
+            if (sibling !== card) {
+              gsap.to(sibling, { opacity: 0.7, duration: 0.3, ease: EASE });
             }
-            positionPreview(e);
-          }
+          });
         };
 
         const onLeave = () => {
-          if (number) gsap.to(number, { x: 0, duration: 0.2, ease: EASE });
-          if (title) gsap.to(title, { y: 0, duration: 0.2, ease: EASE });
-          if (desc) gsap.to(desc, { opacity: 1, duration: 0.2, ease: EASE });
-
-          const preview = previewRef.current;
-          if (preview) {
-            gsap.to(preview, {
-              opacity: 0,
-              scale: 0.98,
-              duration: PREVIEW.leaveDuration,
-              ease: EASE,
-              onComplete: () => setActivePreview(null),
-            });
-          }
+          if (img) gsap.to(img, { scale: 1, duration: 0.5, ease: EASE });
+          gsap.to(card, { y: 0, duration: 0.35, ease: EASE });
+          if (arrow) gsap.to(arrow, { x: 0, duration: 0.25, ease: EASE });
+          if (title) gsap.to(title, { x: 0, duration: 0.25, ease: EASE });
+          cards.forEach((sibling) => {
+            if (sibling !== card) {
+              gsap.to(sibling, { opacity: 1, duration: 0.3, ease: EASE });
+            }
+          });
         };
 
-        const onMove = (e: MouseEvent) => positionPreview(e);
-
+        /* keyboard focus */
         const onFocus = () => {
-          if (number) gsap.to(number, { x: 3, duration: 0.25, ease: EASE });
-          if (title) gsap.to(title, { y: -1, duration: 0.2, ease: EASE });
+          if (img) gsap.to(img, { scale: 1.018, duration: 0.6, ease: EASE });
+          gsap.to(card, { y: -2, duration: 0.35, ease: EASE });
+          if (arrow) gsap.to(arrow, { x: 4, duration: 0.3, ease: EASE });
+          if (title) gsap.to(title, { x: 1, duration: 0.3, ease: EASE });
         };
 
         const onBlur = () => {
-          if (number) gsap.to(number, { x: 0, duration: 0.2, ease: EASE });
-          if (title) gsap.to(title, { y: 0, duration: 0.2, ease: EASE });
+          if (img) gsap.to(img, { scale: 1, duration: 0.5, ease: EASE });
+          gsap.to(card, { y: 0, duration: 0.35, ease: EASE });
+          if (arrow) gsap.to(arrow, { x: 0, duration: 0.25, ease: EASE });
+          if (title) gsap.to(title, { x: 0, duration: 0.25, ease: EASE });
         };
 
-        row.addEventListener("mouseenter", onEnter);
-        row.addEventListener("mouseleave", onLeave);
-        row.addEventListener("mousemove", onMove);
-        row.addEventListener("focus", onFocus);
-        row.addEventListener("blur", onBlur);
+        card.addEventListener("mouseenter", onEnter);
+        card.addEventListener("mouseleave", onLeave);
+        card.addEventListener("focus", onFocus);
+        card.addEventListener("blur", onBlur);
 
         cleanups.push(() => {
-          row.removeEventListener("mouseenter", onEnter);
-          row.removeEventListener("mouseleave", onLeave);
-          row.removeEventListener("mousemove", onMove);
-          row.removeEventListener("focus", onFocus);
-          row.removeEventListener("blur", onBlur);
+          card.removeEventListener("mouseenter", onEnter);
+          card.removeEventListener("mouseleave", onLeave);
+          card.removeEventListener("focus", onFocus);
+          card.removeEventListener("blur", onBlur);
         });
       });
 
       return () => cleanups.forEach((fn) => fn());
     },
-    { scope: listRef },
+    { scope: sectionRef },
   );
 
   /* ---- render ---- */
@@ -272,10 +228,8 @@ export default function Work() {
       className="container-center section-space"
     >
       {/* ---- header ---- */}
-      <div ref={headerRef} className="mb-12 max-md:mb-8">
-        <span className="section-label">
-          Selected Work
-        </span>
+      <div ref={headerRef} className="mb-10 max-md:mb-7">
+        <span className="section-label">Selected Work</span>
         <h2 className="section-heading mb-3">
           Products I&apos;ve designed
           <br className="max-md:hidden" />{" "}
@@ -287,76 +241,81 @@ export default function Work() {
         </p>
       </div>
 
-      {/* ---- project list ---- */}
-      <div ref={listRef} className="flex flex-col">
+      {/* ---- project grid ---- */}
+      <div
+        ref={gridRef}
+        className="grid grid-cols-2 gap-4 max-md:grid-cols-1"
+      >
         {PROJECTS.map((project) => (
           <Link
             key={project.id}
             href={project.href}
-            data-project-row
-            ref={(el) => {
-              if (el) rowRefs.current.set(project.id, el);
-              else rowRefs.current.delete(project.id);
-            }}
-            className="group flex items-start gap-6 border-t border-[var(--color-border-subtle)] py-6 text-left transition-colors duration-200 hover:bg-[var(--color-surface-hover)] max-md:flex-col max-md:gap-3 max-md:py-5"
+            data-project-card
+            className="group flex flex-col rounded-2xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-left transition-[border-color,box-shadow] duration-300 ease-[var(--ease-soft)] hover:border-[var(--color-border)] hover:shadow-[var(--shadow-md)]"
+            style={{ willChange: "transform" }}
             aria-label={`${project.title} — ${project.category}`}
           >
-            {/* number */}
-            <span
-              data-project-number
-              className="mt-0.5 w-10 shrink-0 text-[11px] font-medium tabular-nums text-[var(--color-ink-muted)] max-md:w-auto max-md:text-[10px]"
+            {/* image area */}
+            <div
+              data-card-image
+              className="relative mb-3 aspect-[16/10] w-full overflow-hidden rounded-xl bg-[var(--color-background-subtle)]"
+              style={{ willChange: "transform" }}
             >
-              {project.number}
-            </span>
-
-            {/* content */}
-            <div className="flex flex-1 flex-col gap-1">
-              <h3
-                data-project-title
-                className="text-[20px] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--color-ink)] transition-colors duration-200 group-hover:text-[var(--color-primary)] max-md:text-[17px]"
-              >
-                {project.title}
-              </h3>
-              <p
-                data-project-desc
-                className="max-w-[460px] text-[13px] leading-[1.55] text-[var(--color-ink-secondary)] max-md:text-[12px]"
-              >
-                {project.description}
-              </p>
-              <span className="mt-0.5 text-[11px] font-medium text-[var(--color-ink-tertiary)]">
-                {project.category}
-              </span>
-            </div>
-
-            {/* year + arrow */}
-            <div className="flex shrink-0 items-center gap-2.5 max-md:mt-1">
-              <span className="text-[11px] font-medium text-[var(--color-ink-muted)]">
-                {project.year}
-              </span>
-              <ArrowUpRight
-                size={13}
-                strokeWidth={2}
-                className="text-[var(--color-ink-muted)] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--color-ink-secondary)]"
-              />
-            </div>
-
-            {/* mobile inline image */}
-            {project.image && (
-              <div className="mt-2 block w-full overflow-hidden rounded-xl md:hidden">
-                <Image
+              {project.image ? (
+                <img
                   src={project.image}
                   alt={project.title}
-                  width={640}
-                  height={400}
-                  className="h-auto w-full object-cover"
+                  className="h-full w-full object-cover"
                 />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <span className="text-[13px] font-medium text-[var(--color-ink-muted)]">
+                    {project.title}
+                  </span>
+                </div>
+              )}
+
+              {/* hover affordance */}
+              <div
+                data-card-arrow
+                className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-ink-muted)] opacity-0 shadow-[var(--shadow-sm)] transition-[opacity] duration-300 group-hover:opacity-100"
+              >
+                <ArrowUpRight size={14} strokeWidth={2} />
               </div>
-            )}
+            </div>
+
+            {/* content */}
+            <div className="flex flex-1 flex-col px-1 pb-1">
+              <div className="flex items-start justify-between gap-3">
+                <h3
+                  data-card-title
+                  className="text-[16px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] max-md:text-[15px]"
+                  style={{ willChange: "transform" }}
+                >
+                  {project.title}
+                </h3>
+                <span className="mt-0.5 shrink-0 text-[11px] font-medium tabular-nums text-[var(--color-ink-muted)]">
+                  {project.number}
+                </span>
+              </div>
+
+              <p className="mt-1 text-[12px] leading-[1.5] text-[var(--color-ink-secondary)]">
+                {project.description}
+              </p>
+
+              {/* metadata */}
+              <div className="mt-auto flex items-center gap-2 pt-3">
+                <span className="text-[11px] font-medium text-[var(--color-ink-tertiary)]">
+                  {project.category}
+                </span>
+                <span className="text-[var(--color-ink-muted)]">·</span>
+                <span className="text-[11px] font-medium text-[var(--color-ink-muted)]">
+                  {project.year}
+                </span>
+              </div>
+            </div>
           </Link>
         ))}
-
-        {/* bottom border */}
-        <div className="border-t border-[var(--color-border-subtle)]" />
       </div>
 
       {/* ---- concluding link ---- */}
@@ -372,27 +331,6 @@ export default function Work() {
             className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
           />
         </Link>
-      </div>
-
-      {/* ---- floating preview (desktop only) ---- */}
-      <div
-        ref={previewRef}
-        aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 z-40 hidden overflow-hidden rounded-xl opacity-0 shadow-[var(--shadow-float)] md:block"
-        style={{
-          width: PREVIEW.width,
-          height: PREVIEW.height,
-          willChange: "transform",
-        }}
-      >
-        {activePreview && (
-          <img
-            ref={previewImgRef}
-            src={activePreview.src}
-            alt={activePreview.alt}
-            className="h-full w-full object-cover"
-          />
-        )}
       </div>
     </section>
   );
