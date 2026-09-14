@@ -32,12 +32,12 @@ interface Experience {
 
 function FigmaIcon({ size = 16 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 38 57" fill="none">
-      <path d="M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z" fill="#1ABCFE"/>
-      <path d="M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z" fill="#0ACF83"/>
-      <path d="M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z" fill="#FF7262"/>
-      <path d="M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z" fill="#F24E1E"/>
-      <path d="M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z" fill="#A259FF"/>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <rect x="3.2" y="0.5" width="8" height="8" rx="2.6" fill="#F24E1E"/>
+      <rect x="11.2" y="0.5" width="8" height="8" rx="2.6" fill="#FF7262"/>
+      <rect x="3.2" y="8" width="8" height="8" rx="2.6" fill="#A259FF"/>
+      <rect x="11.2" y="8" width="8" height="8" rx="2.6" fill="#1ABCFE"/>
+      <rect x="3.2" y="15.5" width="8" height="8" rx="2.6" fill="#0ACF83"/>
     </svg>
   );
 }
@@ -48,7 +48,7 @@ function NextjsIcon({ size = 16 }: { size?: number }) {
       <mask id="mask0" style={{maskType: "alpha"}} maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180">
         <circle cx="90" cy="90" r="90" fill="black"/>
       </mask>
-      <g mask="url(#mask0)">
+      <g mask="url(#mask0)" transform="translate(90 90) scale(0.85) translate(-90 -90)">
         <circle cx="90" cy="90" r="90" fill="black"/>
         <path d="M149.508 157.52L69.142 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.165 149.508 157.52Z" fill="url(#paint0)"/>
         <rect x="115" y="54" width="12" height="72" fill="url(#paint1)"/>

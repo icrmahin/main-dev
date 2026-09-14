@@ -18,6 +18,9 @@ const COMPANIES = [
 
 const LABEL = "Worked with";
 
+/* Number of identical copies rendered so the viewport never runs out of content. */
+const COPIES = 4;
+
 /* ---------------------------------------------------------------------------
    Helpers
    --------------------------------------------------------------------------- */
@@ -45,16 +48,22 @@ export default function CompanyMarquee() {
       let tween: gsap.core.Tween | null = null;
 
       const setup = () => {
-        const fullSet = track.querySelector("[data-marquee-set]");
-        if (!fullSet) return;
+        const firstSet = track.querySelector("[data-marquee-set]");
+        const secondSet = firstSet ? (firstSet.nextElementSibling as HTMLElement | null) : null;
+        if (!firstSet || !secondSet) return;
 
-        const setWidth = fullSet.getBoundingClientRect().width;
+        /* True period = distance between the first item of two adjacent copies.
+           This includes the inter-copy gap, keeping the loop pixel-perfect. */
+        const period =
+          secondSet.getBoundingClientRect().left - firstSet.getBoundingClientRect().left;
+
+        if (tween) tween.kill();
 
         gsap.set(track, { x: 0 });
 
         tween = gsap.to(track, {
-          x: -setWidth,
-          duration: setWidth / 30,
+          x: -period,
+          duration: period / 30,
           ease: "none",
           repeat: -1,
         });
@@ -62,6 +71,10 @@ export default function CompanyMarquee() {
 
       /* wait a tick for layout to settle */
       const raf = requestAnimationFrame(setup);
+
+      /* re-measure when content/layout shifts (font load, resize) */
+      const ro = new ResizeObserver(setup);
+      ro.observe(track);
 
       /* hover: slow down */
       const onEnter = () => {
@@ -76,6 +89,7 @@ export default function CompanyMarquee() {
 
       return () => {
         cancelAnimationFrame(raf);
+        ro.disconnect();
         section.removeEventListener("pointerenter", onEnter);
         section.removeEventListener("pointerleave", onLeave);
         if (tween) {
@@ -110,28 +124,23 @@ export default function CompanyMarquee() {
           }}
         >
           <div ref={trackRef} className="flex items-center gap-10 will-change-transform">
-            {/* set 1 */}
-            <div data-marquee-set className="flex items-center gap-10 shrink-0">
-              {COMPANIES.map((name) => (
-                <span
-                  key={name}
-                  className="whitespace-nowrap text-[13px] font-medium tracking-[0.01em] text-[var(--color-ink-muted)] select-none"
-                >
-                  {name}
-                </span>
-              ))}
-            </div>
-            {/* set 2 (duplicate for seamless loop) */}
-            <div className="flex items-center gap-10 shrink-0" aria-hidden="true">
-              {COMPANIES.map((name) => (
-                <span
-                  key={`dup-${name}`}
-                  className="whitespace-nowrap text-[13px] font-medium tracking-[0.01em] text-[var(--color-ink-muted)] select-none"
-                >
-                  {name}
-                </span>
-              ))}
-            </div>
+            {Array.from({ length: COPIES }).map((_, copy) => (
+              <div
+                key={copy}
+                className="flex shrink-0 items-center gap-10"
+                aria-hidden={copy > 0}
+                {...(copy === 0 ? { "data-marquee-set": "" } : {})}
+              >
+                {COMPANIES.map((name) => (
+                  <span
+                    key={`${copy}-${name}`}
+                    className="whitespace-nowrap text-[13px] font-medium tracking-[0.01em] text-[var(--color-ink-muted)] select-none"
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>

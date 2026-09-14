@@ -6,6 +6,9 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowUpRight, Mail } from "lucide-react";
+import { PROJECTS } from "../lib/projects";
+import { DECK_STATES, DECK_Z_BASE } from "../lib/deck";
+import ProjectCard from "./project-card";
 
 /* ---------------------------------------------------------------------------
    Content
@@ -35,7 +38,7 @@ const LOCATION = "Dhaka · Remote";
 function GithubIcon({ size = 14 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-3.375-12-12-12z" />
     </svg>
   );
 }
@@ -92,6 +95,8 @@ export default function Hero() {
   const ctaRef = useRef<HTMLDivElement>(null);
   const availabilityRef = useRef<HTMLDivElement>(null);
   const socialRef = useRef<HTMLDivElement>(null);
+  const compressRef = useRef<HTMLDivElement>(null);
+  const deckRef = useRef<HTMLDivElement>(null);
 
   /* ---- entrance animation ---- */
   useGSAP(
@@ -107,6 +112,7 @@ export default function Hero() {
         ctaRef.current,
         availabilityRef.current,
         socialRef.current,
+        deckRef.current,
       ].filter(Boolean) as Element[];
 
       if (reduced) {
@@ -148,12 +154,14 @@ export default function Hero() {
     { scope: sectionRef },
   );
 
-  /* ---- scroll compression ---- */
+  /* ---- scroll compression (text column only — deck must stay put for the
+          Hero→Work flight to remain glued to the grid) ---- */
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
       const el = sectionRef.current;
-      if (!el) return;
+      const content = compressRef.current;
+      if (!el || !content) return;
 
       let last = 0;
 
@@ -163,16 +171,14 @@ export default function Hero() {
         last = y;
 
         if (y < 30) {
-          gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" });
+          gsap.to(el, { opacity: 1, duration: 0.3, ease: "power2.out" });
+          gsap.to(content, { y: 0, duration: 0.3, ease: "power2.out" });
         } else if (d > 2) {
-          gsap.to(el, {
-            y: -10,
-            opacity: 0.9,
-            duration: 0.4,
-            ease: "power2.out",
-          });
+          gsap.to(el, { opacity: 0.9, duration: 0.4, ease: "power2.out" });
+          gsap.to(content, { y: -6, duration: 0.4, ease: "power2.out" });
         } else if (d < -2) {
-          gsap.to(el, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" });
+          gsap.to(el, { opacity: 1, duration: 0.4, ease: "power2.out" });
+          gsap.to(content, { y: 0, duration: 0.4, ease: "power2.out" });
         }
       };
 
@@ -186,132 +192,151 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
+      data-hero-section
       aria-label="Hero"
-      className="relative flex flex-col justify-center px-6 pt-[min(18vh,150px)] pb-[min(10vh,80px)] max-md:pt-[min(14vh,110px)] max-md:pb-[min(6vh,60px)]"
+      className="relative z-20 flex flex-col justify-center px-6 pt-[min(18vh,150px)] pb-[min(10vh,80px)] max-md:pt-[min(14vh,110px)] max-md:pb-[min(6vh,60px)]"
     >
       <div className="container-center">
-        <div className="max-w-[620px]">
-
-          {/* ---- identity row ---- */}
-          <div ref={identityRef} className="mb-8 flex items-center gap-3 max-md:mb-6">
-            <div className="relative h-[44px] w-[44px] shrink-0 overflow-hidden rounded-full shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
-              <Image
-                src="/avater.jpeg"
-                alt="Abdulla Al Mahin"
-                fill
-                sizes="44px"
-                className="object-cover"
-                priority
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[13px] font-semibold leading-[1.2] tracking-[-0.01em] text-[var(--color-ink)]">
-                {NAME}
-              </span>
-              <span className="text-[12px] font-medium leading-[1.3] text-[var(--color-ink-tertiary)]">
-                {TITLE}
-              </span>
-            </div>
-          </div>
-
-          {/* ---- main statement ---- */}
-          <div ref={statement1Ref} className="overflow-hidden">
-            <h1
-              data-reveal
-              className="text-[clamp(32px,4.5vw,48px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
-            >
-              {STATEMENT_LINE_1}
-            </h1>
-          </div>
-
-          <div ref={statement2Ref} className="overflow-hidden">
-            <h1
-              data-reveal
-              className="text-[clamp(32px,4.5vw,48px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
-            >
-              {STATEMENT_LINE_2}
-            </h1>
-          </div>
-
-          {/* ---- supporting statement ---- */}
-          <p
-            ref={supportingRef}
-            className="mt-5 max-w-[480px] text-[14px] leading-[1.65] text-[var(--color-ink-secondary)] max-md:mt-4"
-          >
-            {SUPPORTING}
-          </p>
-
-          {/* ---- capability line ---- */}
-          <div
-            ref={capabilitiesRef}
-            className="mt-6 flex flex-wrap items-center gap-x-1 gap-y-1 max-md:mt-5"
-          >
-            {CAPABILITIES.map((cap, i) => (
-              <span key={cap} className="flex items-center gap-1">
-                {i > 0 && (
-                  <span className="text-[var(--color-ink-muted)]">·</span>
-                )}
-                <span className="text-[12px] font-medium text-[var(--color-ink-tertiary)]">
-                  {cap}
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_356px] lg:gap-12">
+          {/* ---- text column ---- */}
+          <div ref={compressRef} className="lg:max-w-[620px]">
+            {/* identity row */}
+            <div ref={identityRef} className="mb-8 flex items-center gap-3 max-md:mb-6">
+              <div className="relative h-[44px] w-[44px] shrink-0 overflow-hidden rounded-full shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
+                <Image
+                  src="/avater.jpeg"
+                  alt="Abdulla Al Mahin"
+                  fill
+                  sizes="44px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[13px] font-semibold leading-[1.2] tracking-[-0.01em] text-[var(--color-ink)]">
+                  {NAME}
                 </span>
-              </span>
-            ))}
-          </div>
+                <span className="text-[12px] font-medium leading-[1.3] text-[var(--color-ink-tertiary)]">
+                  {TITLE}
+                </span>
+              </div>
+            </div>
 
-          {/* ---- ctas ---- */}
-          <div
-            ref={ctaRef}
-            className="mt-8 flex items-center gap-3 max-md:mt-7"
-          >
-            <Link
-              href={CTA_PRIMARY.href}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-primary)] px-5 py-2 text-[12px] font-medium text-[var(--color-primary-foreground)] shadow-[0_4px_14px_rgba(17,17,24,0.12)] transition-all duration-200 hover:bg-[var(--color-primary-hover)] hover:shadow-[0_6px_18px_rgba(17,17,24,0.16)] hover:-translate-y-px active:scale-[0.97]"
-            >
-              {CTA_PRIMARY.label}
-              <ArrowUpRight size={12} strokeWidth={2.2} />
-            </Link>
-
-            <Link
-              href={CTA_SECONDARY.href}
-              className="inline-flex items-center gap-1 rounded-full px-4 py-2 text-[12px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
-            >
-              {CTA_SECONDARY.label}
-            </Link>
-          </div>
-
-          {/* ---- availability + social ---- */}
-          <div
-            ref={availabilityRef}
-            className="mt-8 flex items-center gap-3 max-md:mt-7 max-md:flex-col max-md:items-start max-md:gap-2.5"
-          >
-            <span className="flex items-center gap-1.5 text-[11px] text-[var(--color-ink-muted)]">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-mint)]" />
-              {AVAILABILITY}
-            </span>
-            <span className="hidden text-[var(--color-ink-muted)] max-md:hidden">·</span>
-            <span className="text-[11px] text-[var(--color-ink-muted)]">
-              {LOCATION}
-            </span>
-          </div>
-
-          <div
-            ref={socialRef}
-            className="mt-5 flex items-center gap-3"
-          >
-            {SOCIAL_LINKS.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                className="text-[var(--color-ink-muted)] transition-colors duration-200 hover:text-[var(--color-ink-secondary)]"
+            {/* main statement */}
+            <div ref={statement1Ref} className="overflow-hidden">
+              <h1
+                data-reveal
+                className="text-[clamp(32px,4.5vw,48px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
               >
-                <s.icon size={14} />
-              </a>
-            ))}
+                {STATEMENT_LINE_1}
+              </h1>
+            </div>
+
+            <div ref={statement2Ref} className="overflow-hidden">
+              <h1
+                data-reveal
+                className="text-[clamp(32px,4.5vw,48px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
+              >
+                {STATEMENT_LINE_2}
+              </h1>
+            </div>
+
+            {/* supporting statement */}
+            <p
+              ref={supportingRef}
+              className="mt-5 max-w-[480px] text-[14px] leading-[1.65] text-[var(--color-ink-secondary)] max-md:mt-4"
+            >
+              {SUPPORTING}
+            </p>
+
+            {/* capability line */}
+            <div
+              ref={capabilitiesRef}
+              className="mt-6 flex flex-wrap items-center gap-x-1 gap-y-1 max-md:mt-5"
+            >
+              {CAPABILITIES.map((cap, i) => (
+                <span key={cap} className="flex items-center gap-1">
+                  {i > 0 && (
+                    <span className="text-[var(--color-ink-muted)]">·</span>
+                  )}
+                  <span className="text-[12px] font-medium text-[var(--color-ink-tertiary)]">
+                    {cap}
+                  </span>
+                </span>
+              ))}
+            </div>
+
+            {/* ctas */}
+            <div ref={ctaRef} className="mt-8 flex items-center gap-3 max-md:mt-7">
+              <Link
+                href={CTA_PRIMARY.href}
+                className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-primary)] px-5 py-2 text-[12px] font-medium text-[var(--color-primary-foreground)] shadow-[0_4px_14px_rgba(17,17,24,0.12)] transition-all duration-200 hover:bg-[var(--color-primary-hover)] hover:shadow-[0_6px_18px_rgba(17,17,24,0.16)] hover:-translate-y-px active:scale-[0.97]"
+              >
+                {CTA_PRIMARY.label}
+                <ArrowUpRight size={12} strokeWidth={2.2} />
+              </Link>
+
+              <Link
+                href={CTA_SECONDARY.href}
+                className="inline-flex items-center gap-1 rounded-full px-4 py-2 text-[12px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
+              >
+                {CTA_SECONDARY.label}
+              </Link>
+            </div>
+
+            {/* availability + social */}
+            <div
+              ref={availabilityRef}
+              className="mt-8 flex items-center gap-3 max-md:mt-7 max-md:flex-col max-md:items-start max-md:gap-2.5"
+            >
+              <span className="flex items-center gap-1.5 text-[11px] text-[var(--color-ink-muted)]">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-mint)]" />
+                {AVAILABILITY}
+              </span>
+              <span className="hidden text-[var(--color-ink-muted)] max-md:hidden">·</span>
+              <span className="text-[11px] text-[var(--color-ink-muted)]">
+                {LOCATION}
+              </span>
+            </div>
+
+            <div ref={socialRef} className="mt-5 flex items-center gap-3">
+              {SOCIAL_LINKS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="text-[var(--color-ink-muted)] transition-colors duration-200 hover:text-[var(--color-ink-secondary)]"
+                >
+                  <s.icon size={14} />
+                </a>
+              ))}
+            </div>
           </div>
 
+          {/* ---- stacked project deck ---- */}
+          <div
+            ref={deckRef}
+            data-hero-deck
+            className="relative mx-auto h-[360px] w-full max-w-[330px] lg:mt-0 lg:h-[400px] lg:w-[356px] lg:max-w-none"
+          >
+            {PROJECTS.map((project, i) => (
+              <div
+                key={project.id}
+                data-hero-card
+                className="absolute left-0 right-0 mx-auto w-[268px] lg:w-[296px]"
+                style={{
+                  transform: `translate(${DECK_STATES[i].x}px, ${DECK_STATES[i].y}px) scale(${DECK_STATES[i].scale}) rotate(${DECK_STATES[i].rotation}deg)`,
+                  transformOrigin: "0 0",
+                  zIndex: DECK_Z_BASE - i,
+                  willChange: "transform",
+                }}
+              >
+                <ProjectCard project={project} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

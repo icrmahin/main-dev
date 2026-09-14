@@ -5,68 +5,8 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowUpRight } from "lucide-react";
-
-/* ---------------------------------------------------------------------------
-   Types
-   --------------------------------------------------------------------------- */
-
-interface Project {
-  readonly id: string;
-  readonly number: string;
-  readonly title: string;
-  readonly description: string;
-  readonly category: string;
-  readonly year: string;
-  readonly href: string;
-  readonly image?: string;
-}
-
-/* ---------------------------------------------------------------------------
-   Project data
-   --------------------------------------------------------------------------- */
-
-const PROJECTS: readonly Project[] = [
-  {
-    id: "project-01",
-    number: "01",
-    title: "Nova Dashboard",
-    description:
-      "A real-time analytics platform for monitoring product performance, user engagement, and system health across multiple services.",
-    category: "Product Engineering",
-    year: "2026",
-    href: "#",
-  },
-  {
-    id: "project-02",
-    number: "02",
-    title: "Relay",
-    description:
-      "A collaborative design tool that bridges the gap between design intent and engineering implementation with live component preview.",
-    category: "Design + Engineering",
-    year: "2025",
-    href: "#",
-  },
-  {
-    id: "project-03",
-    number: "03",
-    title: "Arclight AI",
-    description:
-      "An AI-powered content pipeline that generates, edits, and publishes structured product documentation from natural language.",
-    category: "AI + Product",
-    year: "2025",
-    href: "#",
-  },
-  {
-    id: "project-04",
-    number: "04",
-    title: "Verdant",
-    description:
-      "A sustainability tracking dashboard for teams to measure, report, and reduce their environmental footprint.",
-    category: "Brand + Frontend",
-    year: "2024",
-    href: "#",
-  },
-] as const;
+import { PROJECTS } from "../lib/projects";
+import ProjectCard from "./project-card";
 
 /* ---------------------------------------------------------------------------
    Animation constants
@@ -105,12 +45,8 @@ export default function Work() {
       const headerEls = headerRef.current
         ? Array.from(headerRef.current.children)
         : [];
-      const cards = gridRef.current
-        ? Array.from(gridRef.current.querySelectorAll("[data-project-card]"))
-        : [];
-      const all = [...headerEls, ...cards];
 
-      gsap.set(all, { opacity: 0, y: 16 });
+      gsap.set(headerEls, { opacity: 0, y: 16 });
 
       const observer = new IntersectionObserver(
         ([entry]) => {
@@ -121,14 +57,6 @@ export default function Work() {
 
           headerEls.forEach((el, i) => {
             tl.to(el, { opacity: 1, y: 0, duration: 0.5, ease: EASE }, i * 0.08);
-          });
-
-          cards.forEach((el, i) => {
-            tl.to(
-              el,
-              { opacity: 1, y: 0, duration: 0.6, ease: EASE },
-              headerEls.length * 0.08 + i * 0.08,
-            );
           });
 
           observer.disconnect();
@@ -244,77 +172,11 @@ export default function Work() {
       {/* ---- project grid ---- */}
       <div
         ref={gridRef}
+        data-work-grid
         className="grid grid-cols-2 gap-4 max-md:grid-cols-1"
       >
         {PROJECTS.map((project) => (
-          <Link
-            key={project.id}
-            href={project.href}
-            data-project-card
-            className="group flex flex-col rounded-2xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-left transition-[border-color,box-shadow] duration-300 ease-[var(--ease-soft)] hover:border-[var(--color-border)] hover:shadow-[var(--shadow-md)]"
-            style={{ willChange: "transform" }}
-            aria-label={`${project.title} — ${project.category}`}
-          >
-            {/* image area */}
-            <div
-              data-card-image
-              className="relative mb-3 aspect-[16/10] w-full overflow-hidden rounded-xl bg-[var(--color-background-subtle)]"
-              style={{ willChange: "transform" }}
-            >
-              {project.image ? (
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <span className="text-[13px] font-medium text-[var(--color-ink-muted)]">
-                    {project.title}
-                  </span>
-                </div>
-              )}
-
-              {/* hover affordance */}
-              <div
-                data-card-arrow
-                className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-ink-muted)] opacity-0 shadow-[var(--shadow-sm)] transition-[opacity] duration-300 group-hover:opacity-100"
-              >
-                <ArrowUpRight size={14} strokeWidth={2} />
-              </div>
-            </div>
-
-            {/* content */}
-            <div className="flex flex-1 flex-col px-1 pb-1">
-              <div className="flex items-start justify-between gap-3">
-                <h3
-                  data-card-title
-                  className="text-[16px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] max-md:text-[15px]"
-                  style={{ willChange: "transform" }}
-                >
-                  {project.title}
-                </h3>
-                <span className="mt-0.5 shrink-0 text-[11px] font-medium tabular-nums text-[var(--color-ink-muted)]">
-                  {project.number}
-                </span>
-              </div>
-
-              <p className="mt-1 text-[12px] leading-[1.5] text-[var(--color-ink-secondary)]">
-                {project.description}
-              </p>
-
-              {/* metadata */}
-              <div className="mt-auto flex items-center gap-2 pt-3">
-                <span className="text-[11px] font-medium text-[var(--color-ink-tertiary)]">
-                  {project.category}
-                </span>
-                <span className="text-[var(--color-ink-muted)]">·</span>
-                <span className="text-[11px] font-medium text-[var(--color-ink-muted)]">
-                  {project.year}
-                </span>
-              </div>
-            </div>
-          </Link>
+          <ProjectCard key={project.id} project={project} />
         ))}
       </div>
 
