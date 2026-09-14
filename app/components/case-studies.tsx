@@ -2,10 +2,18 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowUpRight } from "lucide-react";
-import { CASE_STUDIES } from "../lib/case-study";
+import { getProjectsBySlugs } from "../lib/projects";
+
+const CASE_STUDIES = getProjectsBySlugs([
+  "pathao-connect",
+  "parcel-courier-merge",
+  "nova-dashboard",
+  "arclight-ai",
+]);
 
 /* ---------------------------------------------------------------------------
    Animation constants
@@ -158,18 +166,14 @@ export default function CaseStudies() {
               className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-xl bg-[var(--color-background-subtle)]"
               style={{ willChange: "transform" }}
             >
-              {study.image ? (
-                <img
-                  src={study.image}
-                  alt={study.title}
-                  className="h-full w-full object-cover"
+              {study.thumbnail && (
+                <Image
+                  src={study.thumbnail.src}
+                  alt={study.thumbnail.alt}
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
                 />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <span className="text-[13px] font-medium text-[var(--color-ink-muted)]">
-                    {study.title}
-                  </span>
-                </div>
               )}
             </div>
 

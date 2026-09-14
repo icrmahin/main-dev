@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Navigation from './components/navigation'
+import Navigation from './components/navigation/Navigation'
 import PageLoader from './components/page-loader'
 import SmoothScroll from './components/smooth-scroll'
 
@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  ),
   title: "Mahin — Product Engineer",
   description:
     "Mahin is a product engineer working across product design, interface engineering, frontend development, mobile applications, and software systems.",

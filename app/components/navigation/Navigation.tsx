@@ -11,7 +11,7 @@ import {
   scrollToWorkFromExternal,
   smoothScrollTo,
   smoothScrollToPosition,
-} from "../lib/scroll-to";
+} from "../../lib/scroll-to";
 
 /* ---------------------------------------------------------------------------
    Types

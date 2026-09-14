@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import type { Project } from "../lib/projects";
+import type { Project } from "../../lib/projects";
 
 interface ProjectCardProps {
   readonly project: Project;
@@ -11,7 +12,7 @@ interface ProjectCardProps {
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link
-      href={project.href}
+      href={`/work/${project.slug}`}
       data-project-card
       className="group flex flex-col rounded-2xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-left transition-[border-color,box-shadow] duration-300 ease-[var(--ease-soft)] hover:border-[var(--color-border)] hover:shadow-[var(--shadow-md)]"
       style={{ willChange: "transform" }}
@@ -22,15 +23,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         className="relative mb-3 aspect-[16/10] w-full overflow-hidden rounded-xl bg-[var(--color-background-subtle)]"
         style={{ willChange: "transform" }}
       >
-        {project.image ? (
-          <img src={project.image} alt={project.title} className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <span className="text-[13px] font-medium text-[var(--color-ink-muted)]">
-              {project.title}
-            </span>
-          </div>
-        )}
+        <Image
+          src={project.thumbnail.src}
+          alt={project.thumbnail.alt}
+          fill
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="object-cover"
+        />
 
         <div
           data-card-arrow

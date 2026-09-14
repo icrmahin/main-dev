@@ -1,7 +1,7 @@
 import Hero from "./components/hero";
 import HeroWorkTransition from "./components/hero-work-transition";
 import CompanyMarquee from "./components/company-marquee";
-import Work from "./components/work";
+import SelectedWork from "./components/work/SelectedWork";
 import CaseStudies from "./components/case-studies";
 import SelectedInterfaces from "./components/selected-interfaces";
 import About from "./components/about";
@@ -14,7 +14,7 @@ export default function Page() {
       <Hero />
       <HeroWorkTransition />
       <CompanyMarquee />
-      <Work />
+      <SelectedWork />
       <CaseStudies />
       <SelectedInterfaces />
       <About />

@@ -750,6 +750,40 @@ Visual direction:
 
 
 /* ============================================================================
+   CASE STUDY UTILITIES
+   ========================================================================== */
+
+@layer utilities {
+
+  /* Case study reading column — controlled width for body text */
+  .cs-reading-column {
+    max-width: 620px;
+  }
+
+  /* Case study wide media — exceeds the reading column */
+  .cs-wide-media {
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .cs-wide-media {
+      width: calc(100% + 96px);
+      margin-left: -48px;
+      margin-right: -48px;
+    }
+  }
+
+  /* Case study section divider — editorial rule */
+  .cs-section-rule {
+    height: 1px;
+    background: var(--color-border-subtle);
+    border: none;
+  }
+}
+
+
+/* ============================================================================
    REDUCED MOTION
    ========================================================================== */
 

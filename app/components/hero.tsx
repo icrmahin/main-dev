@@ -7,10 +7,10 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
 import { ArrowUpRight, Mail } from "lucide-react";
-import { PROJECTS } from "../lib/projects";
+import { getFeaturedProjects } from "../lib/projects";
 import { DECK_STATES, DECK_Z_BASE } from "../lib/deck";
 import { smoothScrollTo } from "../lib/scroll-to";
-import ProjectCard from "./project-card";
+import ProjectCard from "./work/ProjectCard";
 
 /* ---------------------------------------------------------------------------
    Content
@@ -332,9 +332,9 @@ export default function Hero() {
             data-hero-deck
             className="relative mx-auto h-[360px] w-full max-w-[330px] lg:mt-0 lg:h-[400px] lg:w-[356px] lg:max-w-none"
           >
-            {PROJECTS.map((project, i) => (
+            {getFeaturedProjects().map((project, i) => (
               <div
-                key={project.id}
+                key={project.slug}
                 data-hero-card
                 className="absolute left-0 right-0 mx-auto w-[268px] lg:w-[296px]"
                 style={{

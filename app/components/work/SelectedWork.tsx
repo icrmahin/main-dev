@@ -5,8 +5,10 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowUpRight } from "lucide-react";
-import { PROJECTS } from "../lib/projects";
-import ProjectCard from "./project-card";
+import { getFeaturedProjects } from "../../lib/projects";
+import ProjectCard from "./ProjectCard";
+
+const SELECTED_WORK = getFeaturedProjects();
 
 /* ---------------------------------------------------------------------------
    Animation constants
@@ -27,7 +29,7 @@ function prefersReducedMotion(): boolean {
    Component
    --------------------------------------------------------------------------- */
 
-export default function Work() {
+export default function SelectedWork() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -175,8 +177,8 @@ export default function Work() {
         data-work-grid
         className="grid grid-cols-2 gap-4 max-md:grid-cols-1"
       >
-        {PROJECTS.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+        {SELECTED_WORK.map((project) => (
+          <ProjectCard key={project.slug} project={project} />
         ))}
       </div>
 
