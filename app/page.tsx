@@ -1,4 +1,5 @@
 import Hero from "./components/hero";
+import CompanyMarquee from "./components/company-marquee";
 import Work from "./components/work";
 import CaseStudies from "./components/case-studies";
 import SelectedInterfaces from "./components/selected-interfaces";
@@ -10,6 +11,7 @@ export default function Page() {
   return (
     <main className="flex flex-1 flex-col">
       <Hero />
+      <CompanyMarquee />
       <Work />
       <CaseStudies />
       <SelectedInterfaces />

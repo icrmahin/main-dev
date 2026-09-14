@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 
 /* ---------------------------------------------------------------------------
    Types
@@ -21,6 +21,8 @@ interface Experience {
   readonly company: string;
   readonly period: string;
   readonly description?: string;
+  readonly responsibilities?: readonly string[];
+  readonly stack?: readonly string[];
   readonly href?: string;
 }
 
@@ -81,7 +83,7 @@ function TypescriptIcon({ size = 16 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <rect width="24" height="24" rx="3" fill="#3178C6"/>
       <path d="M14.0732 19.3604V17.6562C14.0732 17.0378 14.1756 16.4753 14.3804 15.9688C14.5852 15.4622 14.8666 15.0434 15.2247 14.7124C15.5827 14.3814 15.9927 14.1464 16.4544 14.0073C16.9162 13.8682 17.4066 13.7986 17.9258 13.7986C18.4538 13.7986 18.9442 13.8682 19.3968 14.0073C19.8494 14.1464 20.2486 14.3766 20.5945 14.6978C20.9403 15.019 21.2109 15.4288 21.4063 15.9272C21.6016 16.4257 21.6993 16.9978 21.6993 17.6436V19.3604H20.1493V17.7861C20.1493 17.2238 20.0517 16.7312 19.8564 16.3083C19.661 15.8854 19.3904 15.5544 19.0445 15.3152C18.6987 15.076 18.3043 14.9315 17.8614 14.8818C17.4186 14.8322 16.9523 14.8074 16.4626 14.8074C15.9586 14.8074 15.4815 14.837 15.0313 14.8963C14.581 14.9556 14.1818 15.0654 13.8337 15.2258C13.4856 15.3862 13.2042 15.6116 12.9895 15.902C12.7748 16.1924 12.6674 16.5664 12.6674 17.024V19.3604H14.0732ZM9.78084 19.3604V9.01172H11.3308V19.3604H9.78084Z" fill="white"/>
-      <path d="M6.90188 18.0059C7.27599 18.4487 7.75308 18.7946 8.33317 19.0436C8.91326 19.2927 9.5469 19.4172 10.2341 19.4172C10.7621 19.4172 11.2441 19.3427 11.6804 19.1937C12.1166 19.0446 12.4908 18.8362 12.8028 18.5684C13.1149 18.3006 13.3535 17.9843 13.5188 17.6196C13.6841 17.2549 13.7667 16.8532 13.7667 16.4145C13.7653 16.1008 13.7143 15.7982 13.6137 15.5066C13.5132 15.215 13.3716 14.9562 13.1889 14.7302C13.0061 14.5042 12.7909 14.316 12.5433 14.1656C12.2957 14.0152 12.025 13.9027 11.7311 13.8281C11.4372 13.7535 11.1353 13.7103 10.8253 13.6985L10.0474 13.667C9.64137 13.6524 9.25848 13.6075 8.89871 13.5322C8.53894 13.457 8.21963 13.3398 7.94077 13.1808C7.66192 13.0217 7.43857 12.8103 7.27072 12.5466C7.10288 12.2828 7.01896 11.9561 7.01896 11.5664C7.01896 11.0473 7.13767 10.5784 7.37508 10.1596C7.6125 9.74084 7.94453 9.40114 8.37118 9.14055C8.79783 8.87996 9.2985 8.70255 9.87318 8.60834C10.4479 8.51413 11.0748 8.46703 11.7539 8.46703C12.4331 8.46703 13.0572 8.51721 13.6263 8.61757C14.1953 8.71793 14.696 8.86715 15.1283 9.06522C15.5606 9.26329 15.9164 9.51046 16.1957 9.80673C16.475 10.103 16.678 10.4489 16.8047 10.8444L15.4277 11.3896C15.2985 11.0406 15.0901 10.7393 14.8026 10.4856C14.515 10.2319 14.1691 10.0386 13.7649 9.90568C13.3607 9.7728 12.9134 9.70636 12.4229 9.70636C11.9094 9.70636 11.4431 9.77436 11.0239 9.91035C10.6048 10.0463 10.2503 10.2366 9.96058 10.4813C9.67089 10.726 9.44895 11.0226 9.29478 11.371C9.14061 11.7195 9.06353 12.1136 9.06353 12.5533C9.06353 12.9976 9.15614 13.3963 9.34135 13.7495C9.52656 14.1027 9.77876 14.3968 10.098 14.6319C10.4172 14.867 10.7851 15.0434 11.2017 15.1611C11.6184 15.2789 12.0657 15.3378 12.5437 15.3378L13.4121 15.3065C13.8549 15.2947 14.284 15.2604 14.6996 15.2036C15.1152 15.1468 15.4921 15.0621 15.8304 14.9496C16.1687 14.8371 16.4519 14.6917 16.6801 14.5134C16.9083 14.3352 17.0707 14.1178 17.1673 13.8612C17.264 13.6046 17.3123 13.3037 17.3123 12.9586V11.5664H14.4967V12.7239H15.8127V12.9586C15.8127 13.1784 15.7807 13.3706 15.7168 13.5352C15.6529 13.6997 15.5567 13.8329 15.4282 13.9348C15.2997 14.0367 15.142 14.1026 14.955 14.1325C14.768 14.1625 14.5597 14.1774 14.3301 14.1774H13.4121C12.9081 14.1774 12.4476 14.1312 12.0306 14.0386C11.6137 13.946 11.2555 13.8095 10.9561 13.6291C10.6567 13.4487 10.4241 13.2248 10.2583 12.9575C10.0925 12.6902 10.0096 12.3784 10.0096 12.0222C10.0096 11.6385 10.0966 11.2916 10.2706 10.9815C10.4445 10.6713 10.6801 10.4133 10.9774 10.2074C11.2747 10.0015 11.6179 9.85474 12.007 9.76708C12.396 9.67942 12.8111 9.63559 13.2521 9.63559L14.3301 9.6669C14.7525 9.67868 15.1617 9.71663 15.5578 9.78075C15.9538 9.84488 16.3183 9.94046 16.6511 10.0675C16.9838 10.1945 17.264 10.3577 17.4917 10.557C17.7193 10.7564 17.889 10.9971 18.0008 11.2793L16.8127 11.7549C16.7009 11.4983 16.5266 11.2682 16.2899 11.0645C16.0532 10.8609 15.7743 10.7011 15.4532 10.5852C15.132 10.4693 14.7811 10.3975 14.4004 10.3698L13.2521 10.3385C12.7858 10.3385 12.3489 10.3823 11.9414 10.4699C11.5339 10.5576 11.1745 10.6873 10.8633 10.8592C10.5521 11.031 10.3065 11.2454 10.1264 11.5023C9.94632 11.7592 9.85626 12.0618 9.85626 12.4102H8.53906C8.53906 11.8856 8.64847 11.4066 8.8673 10.9732C9.08613 10.5399 9.38945 10.1685 9.77727 9.85898C10.1651 9.54947 10.6245 9.31343 11.1554 9.15084C11.6864 8.98826 12.2668 8.90696 12.8966 8.90696Z" fill="white"/>
+      <path d="M6.90188 18.0059C7.27599 18.4487 7.75308 18.7946 8.33317 19.0436C8.91326 19.2927 9.5469 19.4172 10.2341 19.4172C10.7621 19.4172 11.2441 19.3427 11.6804 19.1937C12.1166 19.0446 12.4908 18.8362 12.8028 18.5684C13.1149 18.3006 13.3535 17.9843 13.5188 17.6196C13.6841 17.2549 13.7667 16.8532 13.7667 16.4145C13.7653 16.1008 13.7143 15.7982 13.6137 15.5066C13.5132 15.215 13.3716 14.9562 13.1889 14.7302C13.0061 14.5042 12.7909 14.316 12.5433 14.1656C12.2957 14.0152 12.025 13.9027 11.7311 13.8281C11.4372 13.7535 11.1353 13.7103 10.8253 13.6985L10.0474 13.667C9.64137 13.6524 9.25848 13.6075 8.89871 13.5322C8.53894 13.457 8.21963 13.3398 7.94077 13.1808C7.66192 13.0217 7.43857 12.8103 7.27072 12.5466C7.10288 12.2828 7.01896 11.9561 7.01896 11.5664C7.01896 11.0473 7.13767 10.5784 7.37508 10.1596C7.6125 9.74084 7.94453 9.40114 8.37118 9.14055C8.79783 8.87996 9.2985 8.70255 9.87318 8.60834C10.4479 8.51413 11.0748 8.46703 11.7539 8.46703C12.4331 8.46703 13.0572 8.51721 13.6263 8.61757C14.1953 8.71793 14.696 8.86715 15.1283 9.06522C15.5606 9.26329 15.9164 9.51046 16.1957 9.80673C16.475 10.103 16.678 10.4489 16.8047 10.8444L15.4277 11.3896C15.2985 11.0406 15.0901 10.7393 14.8026 10.4856C14.515 10.2319 14.1691 10.0386 13.7649 9.90568C13.3607 9.7728 12.9134 9.70636 12.4229 9.70636C11.9094 9.70636 11.4431 9.77436 11.0239 9.91035C10.6048 10.0463 10.2503 10.2366 9.96058 10.4813C9.67089 10.726 9.44895 11.0226 9.29478 11.371C9.14061 11.7195 9.06353 12.1136 9.06353 12.5533C9.06353 12.9976 9.15614 13.3963 9.34135 13.7495C9.52656 14.1027 9.77876 14.3968 10.098 14.6319C10.4172 14.867 10.7851 15.0434 11.2017 15.1611C11.6184 15.2789 12.0657 15.3378 12.5437 15.3378L13.4121 15.3065C13.8549 15.2947 14.284 15.2604 14.6996 15.2036C15.1152 15.1468 15.4921 15.0621 15.8304 14.9496C16.1687 14.8371 16.4519 14.6917 16.6801 14.5134C16.9083 14.3352 17.0707 14.1178 17.1673 13.8612C17.264 13.6046 17.3123 13.3037 17.3123 12.9586V11.5664H14.4967V12.7239H15.8127V12.9586C15.8127 13.1784 15.7807 13.3898 15.7169 13.5928C15.653 13.7958 15.5536 13.9732 15.4186 14.125C15.2837 14.2768 15.1192 14.3932 14.9252 14.4742C14.7312 14.5552 14.5141 14.5957 14.2738 14.5957C13.8522 14.5957 13.4973 14.5083 13.2091 14.3335C12.9209 14.1587 12.7029 13.9248 12.555 13.6319C12.4072 13.339 12.3333 13.0094 12.3333 12.6431C12.3333 12.184 12.4414 11.7822 12.6576 11.4378C12.8738 11.0933 13.1718 10.8219 13.5516 10.6234C13.9314 10.425 14.3674 10.3258 14.8595 10.3258C15.3253 10.3258 15.7411 10.4181 16.1068 10.6027C16.4726 10.7873 16.7628 11.0493 16.9774 11.3888C17.1921 11.7283 17.2994 12.1307 17.2994 12.596V13.8403C17.2994 14.778 17.0814 15.5828 16.6454 16.2548C16.2094 16.9268 15.6085 17.433 14.8427 17.7734C14.0769 18.1138 13.1922 18.284 12.1886 18.284C11.5334 18.284 10.9211 18.2149 10.3517 18.0767C9.78229 17.9385 9.27769 17.7439 8.83797 17.493L6.90188 18.0059Z" fill="white"/>
     </svg>
   );
 }
@@ -151,27 +153,66 @@ const STACK: readonly StackItem[] = [
 const EXPERIENCE: readonly Experience[] = [
   {
     role: "Product Engineer",
-    company: "Independent",
-    period: "2024 — Present",
+    company: "Pathao",
+    period: "Mar 2025 — Present",
     description:
-      "Designing and engineering digital products across interface, systems, and AI — from concept through production.",
-    href: "#",
+      "Building product features across interface and systems layers for a leading mobility platform.",
+    responsibilities: [
+      "Designed and shipped product features end-to-end",
+      "Built frontend systems with React and TypeScript",
+      "Collaborated with design and backend teams on integration",
+    ],
+    stack: ["React", "TypeScript", "Next.js"],
   },
   {
     role: "Frontend Engineer",
-    company: "Placeholder Co.",
-    period: "2022 — 2024",
+    company: "klikit",
+    period: "Mar 2023 — Feb 2025",
     description:
-      "Built and maintained frontend systems for web and mobile applications using React, TypeScript, and modern tooling.",
-    href: "#",
+      "Led frontend development for a digital commerce platform, building scalable interfaces and design systems.",
+    responsibilities: [
+      "Built and maintained the core frontend application",
+      "Developed reusable component libraries",
+      "Improved performance and accessibility across the platform",
+    ],
+    stack: ["React", "TypeScript", "Tailwind CSS"],
+  },
+  {
+    role: "Frontend Engineer",
+    company: "ACS Future School",
+    period: "Sept 2024 — Feb 2025",
+    description:
+      "Developed frontend interfaces for an education technology platform.",
+    responsibilities: [
+      "Built responsive web interfaces for student and admin dashboards",
+      "Implemented real-time data visualization components",
+    ],
+    stack: ["React", "TypeScript", "Next.js"],
   },
   {
     role: "UI/UX Designer",
-    company: "Placeholder Studio",
-    period: "2021 — 2022",
+    company: "Panorama",
+    period: "Oct 2022 — Feb 2023",
     description:
-      "Designed interfaces, design systems, and product experiences for startups and digital products.",
-    href: "#",
+      "Designed product interfaces and user experiences for digital products.",
+    responsibilities: [
+      "Created interface designs and interactive prototypes",
+      "Developed design systems and component guidelines",
+      "Conducted user research and usability testing",
+    ],
+    stack: ["Figma"],
+  },
+  {
+    role: "Frontend Developer",
+    company: "Better Aid BD",
+    period: "May 2022 — Sept 2022",
+    description:
+      "Built frontend interfaces for a social impact platform connecting aid organizations.",
+    responsibilities: [
+      "Developed responsive web interfaces",
+      "Implemented interactive data dashboards",
+    ],
+    stack: ["React", "JavaScript", "Tailwind CSS"],
   },
 ] as const;
 
@@ -190,6 +231,11 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+function isTouchDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(pointer: coarse)").matches;
+}
+
 /* ---------------------------------------------------------------------------
    Component
    --------------------------------------------------------------------------- */
@@ -203,7 +249,9 @@ export default function About() {
   const expListRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
-  const [tooltip, setTooltip] = useState<{ name: string; x: number; y: number } | null>(null);
+  const [openExp, setOpenExp] = useState<string | null>(null);
+  const openExpRef = useRef<string | null>(null);
+
   const iconRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
 
   /* ---- portrait hover ---- */
@@ -327,7 +375,67 @@ export default function About() {
     { scope: sectionRef },
   );
 
-  /* ---- stack icon hover ---- */
+  /* ---- stack antigravity ---- */
+  useGSAP(
+    () => {
+      if (prefersReducedMotion() || isTouchDevice()) return;
+      const container = stackContainerRef.current;
+      if (!container) return;
+
+      const RADIUS = 90;
+      const MAX_DISPLACEMENT = 16;
+      const icons = Array.from(container.querySelectorAll("[data-stack-icon]")) as HTMLElement[];
+      if (!icons.length) return;
+
+      /* cache rest positions (all 0 at rest, we just need quickTo instances) */
+      const xTos = icons.map((el) => gsap.quickTo(el, "x", { duration: 0.5, ease: "power3.out" }));
+      const yTos = icons.map((el) => gsap.quickTo(el, "y", { duration: 0.5, ease: "power3.out" }));
+
+      const onMove = (e: PointerEvent) => {
+        const containerRect = container.getBoundingClientRect();
+        const mx = e.clientX - containerRect.left;
+        const my = e.clientY - containerRect.top;
+
+        icons.forEach((icon, i) => {
+          const iconRect = icon.getBoundingClientRect();
+          const ix = iconRect.left - containerRect.left + iconRect.width / 2;
+          const iy = iconRect.top - containerRect.top + iconRect.height / 2;
+
+          const dx = ix - mx;
+          const dy = iy - my;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < RADIUS) {
+            const force = 1 - dist / RADIUS;
+            const nx = dx / (dist || 1);
+            const ny = dy / (dist || 1);
+            xTos[i](nx * force * MAX_DISPLACEMENT);
+            yTos[i](ny * force * MAX_DISPLACEMENT);
+          } else {
+            xTos[i](0);
+            yTos[i](0);
+          }
+        });
+      };
+
+      const onLeave = () => {
+        icons.forEach((_, i) => {
+          xTos[i](0);
+          yTos[i](0);
+        });
+      };
+
+      container.addEventListener("pointermove", onMove);
+      container.addEventListener("pointerleave", onLeave);
+      return () => {
+        container.removeEventListener("pointermove", onMove);
+        container.removeEventListener("pointerleave", onLeave);
+      };
+    },
+    { scope: sectionRef },
+  );
+
+  /* ---- stack icon hover (micro-interaction) ---- */
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
@@ -339,69 +447,43 @@ export default function About() {
 
       icons.forEach((icon, index) => {
         const onEnter = () => {
-          /* bring to front */
           gsap.set(icon, { zIndex: 20 });
-
           gsap.to(icon, {
-            y: -3,
-            scale: 1.05,
+            scale: 1.04,
             boxShadow: "0 6px 18px rgb(61 59 92 / 0.12)",
             duration: 0.22,
             ease: "power2.out",
-          });
-
-          /* show tooltip */
-          const rect = icon.getBoundingClientRect();
-          const containerRect = container.getBoundingClientRect();
-          setTooltip({
-            name: STACK[index].name,
-            x: rect.left - containerRect.left + rect.width / 2,
-            y: rect.top - containerRect.top - 8,
           });
         };
 
         const onLeave = () => {
           gsap.set(icon, { zIndex: index + 1 });
-
           gsap.to(icon, {
-            y: 0,
             scale: 1,
             boxShadow: "0 2px 8px rgb(61 59 92 / 0.06)",
             duration: 0.25,
             ease: "power2.out",
           });
-
-          setTooltip(null);
         };
 
         const onFocus = () => {
           gsap.set(icon, { zIndex: 20 });
           gsap.to(icon, {
-            y: -3,
-            scale: 1.05,
+            scale: 1.04,
             boxShadow: "0 6px 18px rgb(61 59 92 / 0.12)",
             duration: 0.22,
             ease: "power2.out",
-          });
-          const rect = icon.getBoundingClientRect();
-          const containerRect = container.getBoundingClientRect();
-          setTooltip({
-            name: STACK[index].name,
-            x: rect.left - containerRect.left + rect.width / 2,
-            y: rect.top - containerRect.top - 8,
           });
         };
 
         const onBlur = () => {
           gsap.set(icon, { zIndex: index + 1 });
           gsap.to(icon, {
-            y: 0,
             scale: 1,
             boxShadow: "0 2px 8px rgb(61 59 92 / 0.06)",
             duration: 0.25,
             ease: "power2.out",
           });
-          setTooltip(null);
         };
 
         icon.addEventListener("mouseenter", onEnter);
@@ -421,40 +503,59 @@ export default function About() {
     { scope: sectionRef },
   );
 
-  /* ---- experience row hover ---- */
-  useGSAP(
-    () => {
-      if (prefersReducedMotion()) return;
-      const list = expListRef.current;
-      if (!list) return;
+  /* ---- experience accordion ---- */
+  const toggleExp = useCallback(
+    (company: string) => {
+      const wasOpen = openExpRef.current;
+      const next = wasOpen === company ? null : company;
 
-      const cleanups: Array<() => void> = [];
+      /* close previous */
+      if (wasOpen) {
+        const prevPanel = document.getElementById(`exp-panel-${wasOpen}`);
+        const prevChevron = document.querySelector(`[data-exp-chevron="${wasOpen}"]`);
+        if (prevPanel) {
+          gsap.to(prevPanel, {
+            height: 0,
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out",
+            onComplete: () => {
+              prevPanel.style.overflow = "hidden";
+            },
+          });
+        }
+        if (prevChevron) {
+          gsap.to(prevChevron, { rotation: 0, duration: 0.3, ease: "power2.out" });
+        }
+      }
 
-      const rows = list.querySelectorAll("[data-exp-row]");
-      rows.forEach((row) => {
-        const arrow = row.querySelector("[data-exp-arrow]");
-        const role = row.querySelector("[data-exp-role]");
+      /* open new */
+      if (next) {
+        const panel = document.getElementById(`exp-panel-${next}`);
+        const chevron = document.querySelector(`[data-exp-chevron="${next}"]`);
+        if (panel) {
+          panel.style.overflow = "hidden";
+          const targetH = panel.scrollHeight;
+          gsap.set(panel, { height: 0, opacity: 0 });
+          gsap.to(panel, {
+            height: targetH,
+            opacity: 1,
+            duration: 0.4,
+            ease: "power2.out",
+            onComplete: () => {
+              panel.style.overflow = "visible";
+            },
+          });
+        }
+        if (chevron) {
+          gsap.to(chevron, { rotation: 180, duration: 0.3, ease: "power2.out" });
+        }
+      }
 
-        const onEnter = () => {
-          if (role) gsap.to(role, { x: 2, duration: 0.25, ease: EASE });
-          if (arrow) gsap.to(arrow, { x: 3, duration: 0.25, ease: EASE });
-        };
-        const onLeave = () => {
-          if (role) gsap.to(role, { x: 0, duration: 0.2, ease: EASE });
-          if (arrow) gsap.to(arrow, { x: 0, duration: 0.2, ease: EASE });
-        };
-
-        row.addEventListener("mouseenter", onEnter);
-        row.addEventListener("mouseleave", onLeave);
-        cleanups.push(() => {
-          row.removeEventListener("mouseenter", onEnter);
-          row.removeEventListener("mouseleave", onLeave);
-        });
-      });
-
-      return () => cleanups.forEach((fn) => fn());
+      openExpRef.current = next;
+      setOpenExp(next);
     },
-    { scope: sectionRef },
+    [],
   );
 
   /* ---- render ---- */
@@ -518,7 +619,6 @@ export default function About() {
             <div
               ref={stackContainerRef}
               className="relative flex items-center"
-              onMouseLeave={() => setTooltip(null)}
             >
               {STACK.map((item, index) => {
                 const Icon = item.icon;
@@ -544,23 +644,6 @@ export default function About() {
                   </button>
                 );
               })}
-
-              {/* tooltip */}
-              {tooltip && (
-                <div
-                  className="pointer-events-none absolute z-50 -translate-x-1/2 whitespace-nowrap rounded-lg bg-[var(--color-ink)] px-2.5 py-1 text-[11px] font-medium text-[var(--color-ink-on-dark)]"
-                  style={{
-                    left: tooltip.x,
-                    top: tooltip.y,
-                    transform: "translate(-50%, -100%)",
-                  }}
-                >
-                  {tooltip.name}
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
-                    <div className="h-0 w-0 border-l-[5px] border-r-[5px] border-t-[5px] border-l-transparent border-r-transparent border-t-[var(--color-ink)]" />
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
@@ -573,44 +656,117 @@ export default function About() {
             </div>
 
             <div ref={expListRef} className="flex flex-col">
-              {EXPERIENCE.map((exp) => (
-                <Link
-                  key={`${exp.company}-${exp.period}`}
-                  href={exp.href ?? "#"}
-                  data-exp-row
-                  className="group flex items-start justify-between gap-5 border-t border-[var(--color-border-subtle)] py-5 text-left transition-colors duration-200 hover:bg-[var(--color-surface-hover)] max-md:flex-col max-md:gap-1.5 max-md:py-4"
-                  aria-label={`${exp.role} at ${exp.company}`}
-                >
-                  <div className="flex flex-1 flex-col gap-0.5">
-                    <span
-                      data-exp-role
-                      className="text-[14px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] max-md:text-[13px]"
-                    >
-                      {exp.role}{" "}
-                      <span className="text-[var(--color-ink-tertiary)]">
-                        / {exp.company}
-                      </span>
-                    </span>
-                    {exp.description && (
-                      <span className="mt-0.5 max-w-[420px] text-[12px] leading-[1.55] text-[var(--color-ink-secondary)]">
-                        {exp.description}
-                      </span>
-                    )}
-                  </div>
+              {EXPERIENCE.map((exp) => {
+                const isOpen = openExp === exp.company;
+                const panelId = `exp-panel-${exp.company}`;
+                const triggerId = `exp-trigger-${exp.company}`;
 
-                  <div className="flex shrink-0 items-center gap-2.5 max-md:mt-0.5">
-                    <span className="text-[11px] font-medium text-[var(--color-ink-muted)]">
-                      {exp.period}
-                    </span>
-                    <ArrowUpRight
-                      data-exp-arrow
-                      size={12}
-                      strokeWidth={2}
-                      className="text-[var(--color-ink-muted)] transition-colors duration-200 group-hover:text-[var(--color-ink-secondary)]"
-                    />
+                return (
+                  <div key={`${exp.company}-${exp.period}`} data-exp-row>
+                    <button
+                      id={triggerId}
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => toggleExp(exp.company)}
+                      className="group flex w-full items-center justify-between gap-5 border-t border-[var(--color-border-subtle)] py-5 text-left transition-colors duration-200 hover:bg-[var(--color-surface-hover)] max-md:flex-col max-md:gap-1.5 max-md:py-4"
+                    >
+                      <div className="flex flex-1 flex-col gap-0.5">
+                        <span
+                          data-exp-role
+                          className="text-[14px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] max-md:text-[13px]"
+                        >
+                          {exp.company}
+                          <span className="ml-2 text-[var(--color-ink-tertiary)]">
+                            {exp.role}
+                          </span>
+                        </span>
+                      </div>
+
+                      <div className="flex shrink-0 items-center gap-2.5 max-md:mt-0.5">
+                        <span className="text-[11px] font-medium text-[var(--color-ink-muted)]">
+                          {exp.period}
+                        </span>
+                        <ChevronDown
+                          data-exp-chevron={exp.company}
+                          size={14}
+                          strokeWidth={2}
+                          className="text-[var(--color-ink-muted)] transition-colors duration-200 group-hover:text-[var(--color-ink-secondary)]"
+                        />
+                      </div>
+                    </button>
+
+                    {/* accordion panel */}
+                    <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={triggerId}
+                      style={{ height: 0, opacity: 0, overflow: "hidden" }}
+                    >
+                      <div className="px-1 pb-5 pt-2">
+                        {exp.description && (
+                          <p className="mb-3 max-w-[500px] text-[13px] leading-[1.6] text-[var(--color-ink-secondary)]">
+                            {exp.description}
+                          </p>
+                        )}
+
+                        {exp.responsibilities && exp.responsibilities.length > 0 && (
+                          <div className="mb-3">
+                            <span className="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">
+                              Responsibilities
+                            </span>
+                            <ul className="flex flex-col gap-1">
+                              {exp.responsibilities.map((r) => (
+                                <li
+                                  key={r}
+                                  className="flex items-start gap-2 text-[13px] leading-[1.5] text-[var(--color-ink-secondary)]"
+                                >
+                                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[var(--color-ink-muted)]" />
+                                  {r}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {exp.stack && exp.stack.length > 0 && (
+                          <div className="mb-3">
+                            <span className="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">
+                              Stack
+                            </span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {exp.stack.map((s) => (
+                                <span
+                                  key={s}
+                                  className="inline-flex items-center rounded-full bg-[var(--color-background-subtle)] px-2.5 py-0.5 text-[11px] font-medium text-[var(--color-ink-secondary)]"
+                                >
+                                  {s}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {exp.href && exp.href !== "#" && (
+                          <Link
+                            href={exp.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group/link inline-flex items-center gap-1 text-[12px] font-medium text-[var(--color-ink-secondary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
+                          >
+                            Visit site
+                            <ArrowUpRight
+                              size={11}
+                              strokeWidth={2}
+                              className="transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                            />
+                          </Link>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </Link>
-              ))}
+                );
+              })}
               <div className="border-t border-[var(--color-border-subtle)]" />
             </div>
           </div>
