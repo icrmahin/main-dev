@@ -137,7 +137,6 @@ export default function HeroWorkTransition() {
       gsap.set(workCards, { autoAlpha: 0 });
 
       /* geometry in page space at build time */
-      const origin = measure(deckCards[0]);
       const cells = workCards.map(measure);
       const deckImgs = deckCards.map((c) =>
         measure(c.querySelector("[data-card-image]")!),

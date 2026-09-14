@@ -18,7 +18,7 @@ export const PROJECTS: readonly Project[] = [
       "A real-time analytics platform for monitoring product performance, user engagement, and system health across multiple services.",
     category: "Product Engineering",
     year: "2026",
-    href: "#",
+    href: "/work/nova-dashboard",
   },
   {
     id: "project-02",
@@ -28,7 +28,7 @@ export const PROJECTS: readonly Project[] = [
       "A collaborative design tool that bridges the gap between design intent and engineering implementation with live component preview.",
     category: "Design + Engineering",
     year: "2025",
-    href: "#",
+    href: "/work/relay",
   },
   {
     id: "project-03",
@@ -38,7 +38,7 @@ export const PROJECTS: readonly Project[] = [
       "An AI-powered content pipeline that generates, edits, and publishes structured product documentation from natural language.",
     category: "AI + Product",
     year: "2025",
-    href: "#",
+    href: "/work/arclight-ai",
   },
   {
     id: "project-04",
@@ -48,6 +48,6 @@ export const PROJECTS: readonly Project[] = [
       "A sustainability tracking dashboard for teams to measure, report, and reduce their environmental footprint.",
     category: "Brand + Frontend",
     year: "2024",
-    href: "#",
+    href: "/work/verdant",
   },
 ] as const;

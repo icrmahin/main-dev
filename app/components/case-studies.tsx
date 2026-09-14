@@ -5,68 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowUpRight } from "lucide-react";
-
-/* ---------------------------------------------------------------------------
-   Types
-   --------------------------------------------------------------------------- */
-
-interface CaseStudy {
-  readonly id: string;
-  readonly title: string;
-  readonly description: string;
-  readonly year?: string;
-  readonly role?: string;
-  readonly tags?: readonly string[];
-  readonly image?: string;
-  readonly href?: string;
-}
-
-/* ---------------------------------------------------------------------------
-   Data — use placeholders where real data is unavailable
-   --------------------------------------------------------------------------- */
-
-const CASE_STUDIES: readonly CaseStudy[] = [
-  {
-    id: "cs-01",
-    title: "Pathao Connect",
-    description:
-      "Formalizing street side bike rides without changing their nature and making them safer.",
-    year: "2025",
-    role: "Product Design · Engineering",
-    image: undefined,
-    href: "#",
-  },
-  {
-    id: "cs-02",
-    title: "Parcel × Courier Merge",
-    description:
-      "Merging two delivery services into one address-first flow that routes every order to the right service.",
-    year: "2025",
-    role: "Product Design · Engineering",
-    image: undefined,
-    href: "#",
-  },
-  {
-    id: "cs-03",
-    title: "Nova Dashboard",
-    description:
-      "A real-time analytics platform for monitoring product performance and system health.",
-    year: "2026",
-    role: "Product Engineering",
-    image: undefined,
-    href: "#",
-  },
-  {
-    id: "cs-04",
-    title: "Arclight AI",
-    description:
-      "An AI-powered content pipeline that generates, edits, and publishes structured product documentation.",
-    year: "2025",
-    role: "AI · Product",
-    image: undefined,
-    href: "#",
-  },
-] as const;
+import { CASE_STUDIES } from "../lib/case-study";
 
 /* ---------------------------------------------------------------------------
    Animation constants
@@ -207,8 +146,8 @@ export default function CaseStudies() {
       >
         {CASE_STUDIES.map((study) => (
           <Link
-            key={study.id}
-            href={study.href ?? "#"}
+            key={study.slug}
+            href={`/work/${study.slug}`}
             data-case-study
             className="group flex flex-col rounded-2xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 transition-colors duration-200 hover:border-[var(--color-border)]"
             aria-label={study.title}
