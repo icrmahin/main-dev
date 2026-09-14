@@ -289,6 +289,24 @@ Visual direction:
     line-height: 1.5;
   }
 
+  /* Lenis smooth-scroll (root mode attaches classes to <html>) */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
   button,
   input,
   textarea,

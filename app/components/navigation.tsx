@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useLenis } from "lenis/react";
+import { smoothScrollTo } from "../lib/scroll-to";
 
 /* ---------------------------------------------------------------------------
    Types
@@ -67,6 +69,20 @@ export default function Navigation({
   const itemRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
   const [activeHref, setActiveHref] = useState<string>(items[0].href);
   const [isHoveringNav, setIsHoveringNav] = useState(false);
+  const lenis = useLenis();
+
+  /* ---- anchor navigation: route through Lenis, resolve #work to the
+         transition's actual completion scroll position ---- */
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      const isHash = href.startsWith("#") || href === "/";
+      if (!isHash) return; /* external links scroll naturally */
+
+      e.preventDefault();
+      smoothScrollTo(href, lenis ?? null);
+    },
+    [lenis],
+  );
 
   /* ---- indicator: slide to target relative to shared track ---- */
   const moveIndicator = useCallback(
@@ -254,8 +270,11 @@ export default function Navigation({
       className="fixed top-4 left-1/2 z-50 -translate-x-1/2 opacity-0"
     >
       <div
-        className="relative flex items-center rounded-full border border-[var(--color-border-subtle)] bg-white px-1 py-[3px]"
-        style={{ boxShadow: "var(--shadow-xs)" }}
+        className="relative flex items-center rounded-full border border-white/60 bg-white/72 px-1 py-[3px] backdrop-blur-[14px] backdrop-saturate-150"
+        style={{
+          boxShadow:
+            "0 10px 30px rgb(61 59 92 / 0.10), inset 0 1px 0 rgb(255 255 255 / 0.65)",
+        }}
         onMouseEnter={() => setIsHoveringNav(true)}
         onMouseLeave={() => setIsHoveringNav(false)}
       >
@@ -272,6 +291,7 @@ export default function Navigation({
           <Link
             href={brandHref}
             data-nav-href={brandHref}
+            onClick={(e) => handleNavClick(e, brandHref)}
             ref={(el) => {
               if (el) itemRefs.current.set(brandHref, el);
               else itemRefs.current.delete(brandHref);
@@ -287,6 +307,7 @@ export default function Navigation({
               key={item.href}
               href={item.href}
               data-nav-href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
               ref={(el) => {
                 if (el) itemRefs.current.set(item.href, el);
                 else itemRefs.current.delete(item.href);
