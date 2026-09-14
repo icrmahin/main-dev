@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -34,10 +34,9 @@ const DEFAULT_ITEMS: readonly NavItem[] = [
    Animation constants
    --------------------------------------------------------------------------- */
 
-const ENTRANCE = { duration: 0.8, ease: "power3.out" as const, delay: 0.1 };
+const ENTRANCE = { duration: 0.6, ease: "power3.out" as const, delay: 0.1 };
 const INDICATOR = { duration: 0.3, ease: "power2.out" as const };
-const HOVER_TEXT = { duration: 0.2, ease: "power2.out" as const };
-const SCROLL = { upY: -6, upOpacity: 0.85, duration: 0.35, ease: "power2.out" as const };
+const SCROLL = { hideY: -4, hideOpacity: 0.92, duration: 0.3, ease: "power2.out" as const };
 
 /* ---------------------------------------------------------------------------
    Helpers
@@ -46,6 +45,11 @@ const SCROLL = { upY: -6, upOpacity: 0.85, duration: 0.35, ease: "power2.out" as
 function prefersReducedMotion(): boolean {
   if (typeof window === "undefined") return true;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function getSectionId(href: string): string | null {
+  if (href.startsWith("#")) return href.slice(1);
+  return null;
 }
 
 /* ---------------------------------------------------------------------------
@@ -58,63 +62,129 @@ export default function Navigation({
   brandHref = "/",
 }: NavigationProps) {
   const navRef = useRef<HTMLElement>(null);
-  const pillRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
   const itemRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
+  const [activeHref, setActiveHref] = useState<string>(items[0].href);
+  const [isHoveringNav, setIsHoveringNav] = useState(false);
 
-  /* ---- indicator: slide to target ---- */
-  const moveIndicator = useCallback((href: string) => {
-    const list = listRef.current;
-    const indicator = indicatorRef.current;
-    const target = itemRefs.current.get(href);
-    if (!list || !indicator || !target) return;
+  /* ---- indicator: slide to target relative to shared track ---- */
+  const moveIndicator = useCallback(
+    (href: string, animate = true) => {
+      const track = trackRef.current;
+      const indicator = indicatorRef.current;
+      const target = itemRefs.current.get(href);
+      if (!track || !indicator || !target) return;
 
-    const listRect = list.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
+      const trackRect = track.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
 
-    gsap.to(indicator, {
-      x: targetRect.left - listRect.left,
-      width: targetRect.width,
-      opacity: 1,
-      duration: INDICATOR.duration,
-      ease: INDICATOR.ease,
-    });
-  }, []);
+      const x = targetRect.left - trackRect.left;
+      const width = targetRect.width;
+
+      if (!animate || prefersReducedMotion()) {
+        gsap.set(indicator, { x, width, opacity: 1 });
+        return;
+      }
+
+      gsap.to(indicator, {
+        x,
+        width,
+        opacity: 1,
+        duration: INDICATOR.duration,
+        ease: INDICATOR.ease,
+      });
+    },
+    [],
+  );
+
+  /* ---- IntersectionObserver: detect active section ---- */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const sectionIds = items
+      .map((item) => getSectionId(item.href))
+      .filter((id): id is string => id !== null);
+
+    if (!sectionIds.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            const match = items.find((item) => item.href === `#${id}`);
+            if (match) {
+              setActiveHref(match.href);
+              if (!isHoveringNav) {
+                moveIndicator(match.href, true);
+              }
+            }
+          }
+        }
+      },
+      { rootMargin: "-35% 0px -50% 0px", threshold: 0 },
+    );
+
+    for (const id of sectionIds) {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    }
+
+    return () => observer.disconnect();
+  }, [items, moveIndicator, isHoveringNav]);
 
   /* ---- entrance ---- */
   useGSAP(
     () => {
       if (prefersReducedMotion()) {
         gsap.set(navRef.current, { opacity: 1, y: 0, scale: 1 });
+        moveIndicator(items[0].href, false);
         return;
       }
+
       gsap.fromTo(
         navRef.current,
-        { opacity: 0, y: -10, scale: 0.97 },
-        { opacity: 1, y: 0, scale: 1, ...ENTRANCE },
+        { opacity: 0, y: -8, scale: 0.985 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          ...ENTRANCE,
+          onComplete: () => {
+            moveIndicator(items[0].href, true);
+          },
+        },
       );
     },
     { scope: navRef },
   );
 
-  /* ---- hover: indicator + text micro-interaction ---- */
+  /* ---- hover: indicator slide ---- */
   useGSAP(
     () => {
-      const links = Array.from(itemRefs.current.values());
-      if (!links.length) return;
+      const track = trackRef.current;
+      if (!track) return;
 
       const cleanups: Array<() => void> = [];
 
+      const links = Array.from(itemRefs.current.values());
       links.forEach((linkEl) => {
         const href = linkEl.getAttribute("data-nav-href") ?? "";
+        const isSectionLink = href.startsWith("#");
 
         const onEnter = () => {
-          moveIndicator(href);
-          gsap.to(linkEl, { y: -0.5, ...HOVER_TEXT });
+          if (isSectionLink) {
+            moveIndicator(href, true);
+          }
+          setIsHoveringNav(true);
         };
+
         const onLeave = () => {
-          gsap.to(linkEl, { y: 0, ...HOVER_TEXT });
+          setIsHoveringNav(false);
+          if (isSectionLink) {
+            moveIndicator(activeHref, true);
+          }
         };
 
         linkEl.addEventListener("mouseenter", onEnter);
@@ -127,7 +197,7 @@ export default function Navigation({
 
       return () => cleanups.forEach((fn) => fn());
     },
-    { scope: pillRef },
+    { scope: trackRef, dependencies: [activeHref, moveIndicator] },
   );
 
   /* ---- scroll: hide on scroll down, reveal on scroll up ---- */
@@ -135,25 +205,31 @@ export default function Navigation({
     () => {
       if (prefersReducedMotion()) return;
 
+      const el = navRef.current;
+      if (!el) return;
+
+      const quickToY = gsap.quickTo(el, "y", { duration: 0.25, ease: SCROLL.ease });
+      const quickToOpacity = gsap.quickTo(el, "opacity", { duration: 0.25, ease: SCROLL.ease });
+
       let lastScroll = 0;
 
       const onScroll = () => {
-        const el = navRef.current;
-        if (!el) return;
-
         const scrollY = window.scrollY;
         const delta = scrollY - lastScroll;
         lastScroll = scrollY;
 
         if (scrollY < 20) {
-          gsap.to(el, { y: 0, opacity: 1, duration: 0.3, ease: SCROLL.ease });
+          quickToY(0);
+          quickToOpacity(1);
           return;
         }
 
         if (delta > 2) {
-          gsap.to(el, { y: SCROLL.upY, opacity: SCROLL.upOpacity, duration: SCROLL.duration, ease: SCROLL.ease });
+          quickToY(SCROLL.hideY);
+          quickToOpacity(SCROLL.hideOpacity);
         } else if (delta < -2) {
-          gsap.to(el, { y: 0, opacity: 1, duration: SCROLL.duration, ease: SCROLL.ease });
+          quickToY(0);
+          quickToOpacity(1);
         }
       };
 
@@ -163,40 +239,49 @@ export default function Navigation({
     { scope: navRef },
   );
 
+  /* ---- update active indicator when activeHref changes (scroll-driven) ---- */
+  useEffect(() => {
+    if (!isHoveringNav) {
+      moveIndicator(activeHref, true);
+    }
+  }, [activeHref, moveIndicator, isHoveringNav]);
+
   /* ---- render ---- */
   return (
     <nav
       ref={navRef}
       aria-label="Main navigation"
-      className="fixed top-5 left-1/2 z-50 -translate-x-1/2"
+      className="fixed top-4 left-1/2 z-50 -translate-x-1/2 opacity-0"
     >
       <div
-        ref={pillRef}
-        className="relative flex items-center rounded-full border border-[rgba(0,0,0,0.07)] bg-white/90 backdrop-blur-sm px-1 py-[3px]"
-        style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.02)" }}
+        className="relative flex items-center rounded-full border border-[var(--color-border-subtle)] bg-white px-1 py-[3px]"
+        style={{ boxShadow: "var(--shadow-xs)" }}
+        onMouseEnter={() => setIsHoveringNav(true)}
+        onMouseLeave={() => setIsHoveringNav(false)}
       >
-        {/* indicator */}
-        <span
-          ref={indicatorRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute top-[3px] bottom-[3px] left-0 z-0 rounded-full bg-[#f0f0f4] opacity-0"
-        />
+        {/* track — single coordinate system for indicator + all items */}
+        <div ref={trackRef} className="relative flex items-center gap-0.5">
+          {/* indicator */}
+          <span
+            ref={indicatorRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute top-[3px] bottom-[3px] left-0 z-0 rounded-full bg-[var(--color-background-muted)] opacity-0"
+          />
 
-        {/* brand */}
-        <Link
-          href={brandHref}
-          data-nav-href={brandHref}
-          ref={(el) => {
-            if (el) itemRefs.current.set(brandHref, el);
-            else itemRefs.current.delete(brandHref);
-          }}
-          className="relative z-10 flex items-center px-3 text-[12px] font-semibold tracking-[-0.01em] text-[#18181b] transition-colors hover:text-[#111118]"
-        >
-          {brand}
-        </Link>
+          {/* brand */}
+          <Link
+            href={brandHref}
+            data-nav-href={brandHref}
+            ref={(el) => {
+              if (el) itemRefs.current.set(brandHref, el);
+              else itemRefs.current.delete(brandHref);
+            }}
+            className="relative z-10 flex items-center px-3 text-[12px] font-semibold tracking-[-0.01em] text-[var(--color-ink)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-violet)] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          >
+            {brand}
+          </Link>
 
-        {/* desktop items */}
-        <div ref={listRef} className="relative z-10 hidden items-center gap-0.5 sm:flex">
+          {/* items — single tree, responsive via CSS */}
           {items.map((item) => (
             <Link
               key={item.href}
@@ -206,25 +291,7 @@ export default function Navigation({
                 if (el) itemRefs.current.set(item.href, el);
                 else itemRefs.current.delete(item.href);
               }}
-              className="relative z-10 flex items-center rounded-full px-3 py-1.5 text-[12px] font-medium tracking-[-0.01em] text-[var(--color-ink-tertiary)] transition-colors hover:text-[var(--color-ink)]"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* mobile items */}
-        <div className="relative z-10 flex items-center gap-0.5 sm:hidden">
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              data-nav-href={item.href}
-              ref={(el) => {
-                if (el) itemRefs.current.set(item.href, el);
-                else itemRefs.current.delete(item.href);
-              }}
-              className="relative z-10 flex items-center rounded-full px-2.5 py-1.5 text-[11px] font-medium tracking-[-0.01em] text-[var(--color-ink-tertiary)] transition-colors hover:text-[var(--color-ink)]"
+              className="relative z-10 flex items-center rounded-full px-3 py-1.5 text-[12px] font-medium tracking-[-0.01em] text-[var(--color-ink-tertiary)] transition-colors hover:text-[var(--color-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-violet)] focus-visible:ring-offset-2 focus-visible:ring-offset-white max-sm:px-2.5 max-sm:text-[11px]"
             >
               {item.label}
             </Link>

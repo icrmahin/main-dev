@@ -86,7 +86,6 @@ function prefersReducedMotion(): boolean {
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const avatarRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLSpanElement>(null);
   const line1Ref = useRef<HTMLDivElement>(null);
   const line2Ref = useRef<HTMLDivElement>(null);
@@ -100,7 +99,6 @@ export default function Hero() {
       const reduced = prefersReducedMotion();
 
       const targets = [
-        avatarRef.current,
         nameRef.current,
         line1Ref.current,
         line2Ref.current,
@@ -182,37 +180,6 @@ export default function Hero() {
     { scope: sectionRef },
   );
 
-  /* ---- avatar mouse parallax ---- */
-  useGSAP(
-    () => {
-      if (prefersReducedMotion()) return;
-      const avatar = avatarRef.current;
-      if (!avatar) return;
-
-      const xTo = gsap.quickTo(avatar, "x", {
-        duration: 0.4,
-        ease: "power2.out",
-      });
-      const yTo = gsap.quickTo(avatar, "y", {
-        duration: 0.4,
-        ease: "power2.out",
-      });
-
-      const onMove = (e: MouseEvent) => {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        const dx = ((e.clientX - w / 2) / w) * 5;
-        const dy = ((e.clientY - h / 2) / h) * 3;
-        xTo(Math.max(-4, Math.min(4, dx)));
-        yTo(Math.max(-3, Math.min(3, dy)));
-      };
-
-      window.addEventListener("mousemove", onMove, { passive: true });
-      return () => window.removeEventListener("mousemove", onMove);
-    },
-    { scope: sectionRef },
-  );
-
   /* ---- render ---- */
   return (
     <section
@@ -222,7 +189,7 @@ export default function Hero() {
     >
       <div className="flex max-w-[520px] flex-col items-center text-center">
         {/* ---- avatar ---- */}
-        <div ref={avatarRef} className="mb-5">
+        <div className="mb-5">
           <div className="relative h-[60px] w-[60px] overflow-hidden rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.06)]">
             <Image
               src="/avater.jpeg"
