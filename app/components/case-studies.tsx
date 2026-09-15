@@ -11,8 +11,6 @@ import { getProjectsBySlugs } from "../lib/projects";
 const CASE_STUDIES = getProjectsBySlugs([
   "pathao-connect",
   "parcel-courier-merge",
-  "nova-dashboard",
-  "arclight-ai",
 ]);
 
 /* ---------------------------------------------------------------------------
@@ -142,7 +140,7 @@ export default function CaseStudies() {
         <h2 className="section-heading mb-3">
           Deep product work
         </h2>
-        <p className="max-w-[420px] text-[14px] leading-[1.6] text-[var(--color-ink-secondary)]">
+        <p className="max-w-[420px] text-[13.5px] leading-[1.6] text-[var(--color-ink-secondary)]">
           Selected case studies showing the full product journey — from problem framing through interface design and engineering.
         </p>
       </div>

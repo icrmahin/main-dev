@@ -43,7 +43,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         <div className="flex items-start justify-between gap-3">
           <h3
             data-card-title
-            className="text-[16px] font-medium leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] max-md:text-[15px]"
+            className="text-[15px] font-[550] leading-[1.3] tracking-[-0.01em] text-[var(--color-ink)] max-md:text-[14px]"
             style={{ willChange: "transform" }}
           >
             {project.title}
@@ -53,7 +53,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </span>
         </div>
 
-        <p className="mt-1 text-[12px] leading-[1.5] text-[var(--color-ink-secondary)]">
+        <p className="mt-1 text-[11.5px] leading-[1.5] text-[var(--color-ink-secondary)]">
           {project.description}
         </p>
 

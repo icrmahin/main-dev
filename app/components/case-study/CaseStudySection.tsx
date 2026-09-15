@@ -87,14 +87,14 @@ export function CaseStudySection({ section }: CaseStudySectionProps) {
 
       <h2
         data-reveal
-        className="text-[24px] font-semibold leading-[1.2] tracking-[-0.01em] text-[var(--color-ink)] opacity-0 max-md:text-[21px]"
+        className="text-[21px] font-[600] leading-[1.25] tracking-[-0.018em] text-[var(--color-ink)] opacity-0 max-md:text-[19px]"
       >
         {section.label}
       </h2>
 
       <div
         data-reveal
-        className="mt-4 max-w-[680px] space-y-4 text-[15px] leading-[1.75] text-[var(--color-ink-secondary)] opacity-0"
+        className="mt-3 max-w-[640px] space-y-3.5 text-[14px] leading-[1.7] text-[var(--color-ink-secondary)] opacity-0"
       >
         {section.intro.map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
@@ -102,11 +102,11 @@ export function CaseStudySection({ section }: CaseStudySectionProps) {
       </div>
 
       {section.bullets && section.bullets.length > 0 && (
-        <ul data-reveal className="mt-6 max-w-[680px] space-y-2.5 opacity-0">
+        <ul data-reveal className="mt-5 max-w-[640px] space-y-2 opacity-0">
           {section.bullets.map((bullet, index) => (
             <li
               key={index}
-              className="flex items-start gap-3 text-[14px] leading-[1.6] text-[var(--color-ink-secondary)]"
+              className="flex items-start gap-3 text-[13.5px] leading-[1.6] text-[var(--color-ink-secondary)]"
             >
               <span
                 className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-[var(--color-ink-muted)]"

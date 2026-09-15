@@ -105,16 +105,16 @@ export function CaseStudyHero({ project }: CaseStudyHeroProps) {
 
           <h1
             data-case-study-title
-            className="cs-hero-title mt-5 text-[40px] font-semibold leading-[1.05] tracking-[-0.02em] text-[var(--color-ink)] opacity-0 max-md:text-[32px]"
+            className="cs-hero-title mt-4 text-[34px] font-[600] leading-[1.07] tracking-[-0.025em] text-[var(--color-ink)] opacity-0 max-md:text-[26px]"
           >
             {project.title}
           </h1>
 
-          <p className="cs-hero-desc mt-5 max-w-2xl text-[15px] leading-[1.7] text-[var(--color-ink-secondary)] opacity-0">
+          <p className="cs-hero-desc mt-4 max-w-2xl text-[14px] leading-[1.65] text-[var(--color-ink-secondary)] opacity-0">
             {project.description}
           </p>
 
-          <dl className="cs-hero-meta-row mt-9 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-[var(--color-border-subtle)] py-6 opacity-0 max-md:grid-cols-2">
+          <dl className="cs-hero-meta-row mt-7 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-[var(--color-border-subtle)] py-5 opacity-0 max-md:grid-cols-2">
             {META_FIELDS.filter((field) => project[field.key]).map((field) => (
               <div key={field.key}>
                 <dt className="text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--color-ink-muted)]">

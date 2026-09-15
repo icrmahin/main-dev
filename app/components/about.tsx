@@ -487,14 +487,13 @@ export default function About() {
             className="sticky top-28 inline-block rotate-[-2deg] rounded-2xl bg-[var(--color-surface)] p-2.5 max-lg:static max-lg:mx-auto max-lg:block max-lg:w-fit"
             style={{ boxShadow: "0 8px 24px rgb(61 59 92 / 0.06)" }}
           >
-            <div className="relative h-[260px] w-[220px] overflow-hidden rounded-xl max-md:h-[200px] max-md:w-[170px]">
+            <div className="relative h-[240px] w-[240px] overflow-hidden rounded-xl max-md:h-[200px] max-md:w-[200px]">
               <Image
-                src="/avater.jpg"
-                alt="Abdulla Al Mahin"
+                src="/avater.jpeg"
+                alt="Abdulla Al Mahin — Product Engineer"
                 fill
-                sizes="(max-width: 768px) 170px, 220px"
-                className="object-cover"
-                priority
+                sizes="(max-width: 768px) 200px, 240px"
+                className="object-cover object-center"
               />
             </div>
           </div>
@@ -506,67 +505,28 @@ export default function About() {
           <div ref={contentRef}>
             <span className="section-label">About</span>
 
-            <p className="mb-4 max-w-[520px] text-[20px] font-medium leading-[1.35] tracking-[-0.02em] text-[var(--color-ink)] max-md:text-[18px]">
+            <p className="mb-3 max-w-[500px] text-[18px] font-[550] leading-[1.35] tracking-[-0.022em] text-[var(--color-ink)] max-md:text-[16px]">
               {INTRO_LEAD}
             </p>
 
-            <p className="max-w-[500px] text-[14px] leading-[1.65] text-[var(--color-ink-secondary)]">
+            <p className="max-w-[500px] text-[13.5px] leading-[1.65] text-[var(--color-ink-secondary)]">
               {INTRO_BODY}
             </p>
-          </div>
 
-          {/* currently + stack */}
-          <div>
-            <span className="mb-2 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
-              Currently
-            </span>
-            <p className="mb-6 max-w-[440px] text-[13px] leading-[1.6] text-[var(--color-ink-secondary)]">
-              {CURRENTLY}
-            </p>
-
-            {/* stack */}
-            <span className="mb-3 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
-              My Stack
-            </span>
-
-            <div
-              ref={stackContainerRef}
-              className="relative flex items-center"
-            >
-              {STACK.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.name}
-                    data-stack-icon
-                    ref={(el) => {
-                      if (el) iconRefs.current.set(item.name, el);
-                      else iconRefs.current.delete(item.name);
-                    }}
-                    type="button"
-                    aria-label={item.name}
-                    className="relative flex h-[36px] w-[36px] items-center justify-center rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-ink-secondary)] transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-violet)]"
-                    style={{
-                      boxShadow: "0 2px 8px rgb(61 59 92 / 0.06)",
-                      marginLeft: index === 0 ? 0 : -5,
-                      zIndex: index + 1,
-                      willChange: "transform",
-                    }}
-                  >
-                    <Icon
-                      aria-hidden="true"
-                      className="h-[22px] w-[22px] shrink-0"
-                    />
-                  </button>
-                );
-              })}
+            <div className="mt-5">
+              <span className="mb-1.5 block text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
+                Currently
+              </span>
+              <p className="max-w-[440px] text-[12.5px] leading-[1.6] text-[var(--color-ink-secondary)]">
+                {CURRENTLY}
+              </p>
             </div>
           </div>
 
-          {/* experience */}
+          {/* experience — progressive disclosure before stack */}
           <div>
             <div ref={expHeaderRef} className="mb-1">
-              <span className="mb-2 block text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
+              <span className="mb-2 block text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
                 Experience
               </span>
             </div>
@@ -687,14 +647,53 @@ export default function About() {
             </div>
           </div>
 
+          {/* stack — compact overlapping cluster after experience */}
+          <div>
+            <span className="mb-2.5 block text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--color-ink-muted)]">
+              Stack
+            </span>
+            <div
+              ref={stackContainerRef}
+              className="relative flex items-center"
+            >
+              {STACK.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.name}
+                    data-stack-icon
+                    ref={(el) => {
+                      if (el) iconRefs.current.set(item.name, el);
+                      else iconRefs.current.delete(item.name);
+                    }}
+                    type="button"
+                    aria-label={item.name}
+                    className="relative flex h-[32px] w-[32px] items-center justify-center rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-ink-secondary)] transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-violet)]"
+                    style={{
+                      boxShadow: "0 2px 8px rgb(61 59 92 / 0.06)",
+                      marginLeft: index === 0 ? 0 : -4,
+                      zIndex: index + 1,
+                      willChange: "transform",
+                    }}
+                  >
+                    <Icon
+                      aria-hidden="true"
+                      className="h-[19px] w-[19px] shrink-0"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* footer */}
           <div ref={footerRef} className="pt-1">
-            <p className="mb-3 text-[13px] leading-[1.6] text-[var(--color-ink-tertiary)]">
+            <p className="mb-2.5 text-[12.5px] leading-[1.6] text-[var(--color-ink-tertiary)]">
               Open to thoughtful product work.
             </p>
             <Link
               href="mailto:icrmahin@gmail.com"
-              className="group inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--color-ink-secondary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
+              className="group inline-flex items-center gap-1.5 text-[11.5px] font-medium text-[var(--color-ink-secondary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
             >
               Let&apos;s work together
               <ArrowUpRight

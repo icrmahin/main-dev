@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: "/avater.jpg",
+        url: "/avater.jpeg",
         width: 1200,
         height: 1200,
         alt: "Abdulla Al Mahin — Product Engineer",
@@ -87,12 +87,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ["/avater.jpg"],
+    images: ["/avater.jpeg"],
     creator: "@icrmahin",
   },
   icons: {
-    icon: "/avater.jpg",
-    apple: "/avater.jpg",
+    icon: "/avater.jpeg",
+    apple: "/avater.jpeg",
   },
   manifest: "/manifest.webmanifest",
 };
@@ -108,7 +108,7 @@ const PERSON_JSON_LD = {
   name: "Abdulla Al Mahin",
   alternateName: ["Mahin", "icrmahin"],
   url: SITE_URL,
-  image: `${SITE_URL}/avater.jpg`,
+  image: `${SITE_URL}/avater.jpeg`,
   jobTitle: "Product Engineer",
   description: SITE_DESCRIPTION,
   sameAs: [

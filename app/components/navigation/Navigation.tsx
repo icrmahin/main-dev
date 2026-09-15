@@ -51,15 +51,15 @@ const SCROLL = {
 };
 const SECTION_OFFSET = 96;
 
-/* restrained dark material — shared by both modes so the shell stays
-   readable over light and dark content */
+/* restrained dark material — selective glass: controlled translucency +
+   real backdrop blur + border + depth so content behind softens */
 const PILL_STYLE: React.CSSProperties = {
-  backgroundColor: "rgba(10, 10, 10, 0.84)",
-  backdropFilter: "blur(18px) saturate(120%)",
-  WebkitBackdropFilter: "blur(18px) saturate(120%)",
-  border: "1px solid rgba(255, 255, 255, 0.10)",
+  backgroundColor: "rgba(12, 12, 14, 0.76)",
+  backdropFilter: "blur(20px) saturate(140%)",
+  WebkitBackdropFilter: "blur(20px) saturate(140%)",
+  border: "1px solid rgba(255, 255, 255, 0.11)",
   boxShadow:
-    "0 10px 30px rgba(0, 0, 0, 0.28), 0 1px 0 rgba(255, 255, 255, 0.06) inset",
+    "0 10px 36px rgba(0, 0, 0, 0.32), 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 -1px 0 rgba(0,0,0,0.12) inset",
 };
 
 const ITEM_CLS =

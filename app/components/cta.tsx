@@ -138,12 +138,12 @@ export default function Cta() {
       ref={sectionRef}
       id="contact"
       aria-label="Contact"
-      className="flex flex-col items-center px-6 pb-[120px] pt-[140px] text-center max-md:pb-[80px] max-md:pt-[100px]"
+      className="flex flex-col items-center px-6 pb-[96px] pt-[96px] text-center max-md:pb-[64px] max-md:pt-[64px]"
     >
       {/* headline */}
       <h2
         ref={headlineRef}
-        className="mb-4 whitespace-pre-line text-[clamp(28px,4.5vw,46px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
+        className="mb-3 whitespace-pre-line text-[clamp(26px,3.8vw,36px)] font-[600] leading-[1.06] tracking-[-0.032em] text-[var(--color-ink)]"
       >
         {HEADLINE}
       </h2>
@@ -151,7 +151,7 @@ export default function Cta() {
       {/* description */}
       <p
         ref={descRef}
-        className="mb-8 max-w-[420px] text-[14px] leading-[1.65] text-[var(--color-ink-secondary)]"
+        className="mb-7 max-w-[420px] text-[13.5px] leading-[1.6] text-[var(--color-ink-secondary)]"
       >
         {DESCRIPTION}
       </p>

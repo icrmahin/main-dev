@@ -205,13 +205,13 @@ export default function Hero() {
           <div ref={compressRef} className="lg:max-w-[620px]">
             {/* identity row */}
             <div ref={identityRef} className="mb-8 flex items-center gap-3 max-md:mb-6">
-              <div className="relative h-[44px] w-[44px] shrink-0 overflow-hidden rounded-full shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
+              <div className="relative h-[42px] w-[42px] shrink-0 overflow-hidden rounded-full shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
                 <Image
-                  src="/avater.jpg"
+                  src="/avater.jpeg"
                   alt="Abdulla Al Mahin"
                   fill
-                  sizes="44px"
-                  className="object-cover"
+                  sizes="42px"
+                  className="object-cover object-center"
                   priority
                 />
               </div>
@@ -232,7 +232,7 @@ export default function Hero() {
             <div ref={statement1Ref} className="overflow-hidden" aria-hidden="true">
               <p
                 data-reveal
-                className="text-[clamp(32px,4.5vw,48px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
+                className="text-[clamp(30px,4vw,42px)] font-[550] leading-[1.06] tracking-[-0.038em] text-[var(--color-ink)]"
               >
                 {STATEMENT_LINE_1}
               </p>
@@ -241,7 +241,7 @@ export default function Hero() {
             <div ref={statement2Ref} className="overflow-hidden" aria-hidden="true">
               <p
                 data-reveal
-                className="text-[clamp(32px,4.5vw,48px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
+                className="text-[clamp(30px,4vw,42px)] font-[550] leading-[1.06] tracking-[-0.038em] text-[var(--color-ink)]"
               >
                 {STATEMENT_LINE_2}
               </p>

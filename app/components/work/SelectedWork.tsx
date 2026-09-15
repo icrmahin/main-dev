@@ -165,7 +165,7 @@ export default function SelectedWork() {
           <br className="max-md:hidden" />{" "}
           <span className="text-[var(--color-ink-tertiary)]">and engineered.</span>
         </h2>
-        <p className="max-w-[440px] text-[14px] leading-[1.6] text-[var(--color-ink-secondary)]">
+        <p className="max-w-[440px] text-[13.5px] leading-[1.6] text-[var(--color-ink-secondary)]">
           A selection of projects spanning product engineering, interface design,
           frontend systems, and AI — built from concept through production.
         </p>
