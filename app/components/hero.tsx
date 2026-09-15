@@ -62,10 +62,10 @@ function XIcon({ size = 14 }: { size?: number }) {
 }
 
 const SOCIAL_LINKS = [
-  { label: "GitHub", href: "https://github.com", icon: GithubIcon },
-  { label: "LinkedIn", href: "https://linkedin.com", icon: LinkedinIcon },
-  { label: "X", href: "https://x.com", icon: XIcon },
-  { label: "Email", href: "mailto:mahin@example.com", icon: Mail },
+  { label: "GitHub", href: "https://github.com/icrmahin", icon: GithubIcon },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/icrmahin", icon: LinkedinIcon },
+  { label: "X", href: "https://x.com/icrmahin", icon: XIcon },
+  { label: "Email", href: "mailto:icrmahin@gmail.com", icon: Mail },
 ] as const;
 
 /* ---------------------------------------------------------------------------
@@ -207,7 +207,7 @@ export default function Hero() {
             <div ref={identityRef} className="mb-8 flex items-center gap-3 max-md:mb-6">
               <div className="relative h-[44px] w-[44px] shrink-0 overflow-hidden rounded-full shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
                 <Image
-                  src="/avater.jpeg"
+                  src="/avater.jpg"
                   alt="Abdulla Al Mahin"
                   fill
                   sizes="44px"
@@ -225,23 +225,26 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* main statement */}
-            <div ref={statement1Ref} className="overflow-hidden">
-              <h1
+            {/* main statement — single h1 preserves heading hierarchy; visual split kept for animation */}
+            <h1 className="sr-only">
+              {STATEMENT_LINE_1} {STATEMENT_LINE_2}
+            </h1>
+            <div ref={statement1Ref} className="overflow-hidden" aria-hidden="true">
+              <p
                 data-reveal
                 className="text-[clamp(32px,4.5vw,48px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
               >
                 {STATEMENT_LINE_1}
-              </h1>
+              </p>
             </div>
 
-            <div ref={statement2Ref} className="overflow-hidden">
-              <h1
+            <div ref={statement2Ref} className="overflow-hidden" aria-hidden="true">
+              <p
                 data-reveal
                 className="text-[clamp(32px,4.5vw,48px)] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
               >
                 {STATEMENT_LINE_2}
-              </h1>
+              </p>
             </div>
 
             {/* supporting statement */}

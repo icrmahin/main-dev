@@ -24,15 +24,18 @@ export async function generateMetadata({
   const project = getProjectBySlug(slug);
   if (!project) return {};
 
-  const title = `${project.title} — Mahin`;
+  const title = `${project.title} — Product Case Study`;
+  const description = project.description;
   return {
     title,
-    description: project.description,
+    description,
     alternates: { canonical: `/work/${project.slug}` },
+    authors: [{ name: "Abdulla Al Mahin" }],
     openGraph: {
-      title,
-      description: project.description,
+      title: `${project.title} — Abdulla Al Mahin`,
+      description,
       type: "article",
+      url: `/work/${project.slug}`,
       images: [
         {
           url: project.hero.src,
@@ -41,6 +44,12 @@ export async function generateMetadata({
           height: 1000,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} — Abdulla Al Mahin`,
+      description,
+      images: [project.hero.src],
     },
   };
 }

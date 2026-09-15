@@ -10,9 +10,9 @@ const FOOTER = {
 } as const;
 
 const LINKS = [
-  { label: "Email", href: "mailto:mahin@example.com" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "GitHub", href: "https://github.com" },
+  { label: "Email", href: "mailto:icrmahin@gmail.com" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/icrmahin" },
+  { label: "GitHub", href: "https://github.com/icrmahin" },
 ] as const;
 
 /* ---------------------------------------------------------------------------

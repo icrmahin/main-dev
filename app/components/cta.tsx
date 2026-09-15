@@ -15,12 +15,12 @@ const HEADLINE = "Have something\nworth building?";
 const DESCRIPTION =
   "I'm available for thoughtful product work across design, frontend engineering and AI.";
 
-const CTA = { label: "Get in touch", href: "mailto:mahin@example.com" };
+const CTA = { label: "Get in touch", href: "mailto:icrmahin@gmail.com" };
 
 const CONTACT_LINKS = [
-  { label: "Email", href: "mailto:mahin@example.com" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "GitHub", href: "https://github.com" },
+  { label: "Email", href: "mailto:icrmahin@gmail.com" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/icrmahin" },
+  { label: "GitHub", href: "https://github.com/icrmahin" },
 ] as const;
 
 /* ---------------------------------------------------------------------------

@@ -185,10 +185,10 @@ export default function SelectedWork() {
       {/* ---- concluding link ---- */}
       <div className="mt-8 max-md:mt-6">
         <Link
-          href="#"
+          href="#case-studies"
           className="group inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--color-ink-tertiary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
         >
-          View all work
+          Explore case studies
           <ArrowUpRight
             size={12}
             strokeWidth={2}

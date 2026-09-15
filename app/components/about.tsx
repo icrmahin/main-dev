@@ -44,23 +44,23 @@ interface Experience {
    --------------------------------------------------------------------------- */
 
 const INTRO_LEAD =
-  "I design and engineer digital products where thoughtful interfaces meet reliable software.";
+  "Product Engineer — I design, engineer, and ship digital products.";
 
 const INTRO_BODY =
-  "My work sits at the intersection of product design, frontend engineering, and AI. I care about systems that feel intentional — interfaces that are quiet, fast, and build trust through clarity rather than decoration.";
+  "I started in interface and brand design, then moved through frontend engineering into end-to-end product development. Today I work across product thinking, interface design, modern frontend, backend systems, and AI-assisted development — comfortable moving between the interface, the implementation, and the product decisions that connect them. I care about systems that feel intentional: quiet, fast, and trustworthy through clarity rather than decoration.";
 
 const CURRENTLY =
-  "Building at the intersection of product design, frontend engineering and AI.";
+  "Currently building product features across interface and systems layers — from design and frontend engineering to backend and AI integration.";
 
 const STACK: readonly StackItem[] = [
   { name: "Figma", icon: Figma },
   { name: "Next.js", icon: Nextjs },
   { name: "React", icon: ReactIcon },
   { name: "TypeScript", icon: Typescript },
-  { name: "Tailwind", icon: Tailwindcss },
+  { name: "Tailwind CSS", icon: Tailwindcss },
   { name: "GSAP", icon: Gsap },
   { name: "Python", icon: Python },
-  { name: "AI APIs", icon: Openai },
+  { name: "OpenAI", icon: Openai },
 ] as const;
 
 const EXPERIENCE: readonly Experience[] = [
@@ -489,7 +489,7 @@ export default function About() {
           >
             <div className="relative h-[260px] w-[220px] overflow-hidden rounded-xl max-md:h-[200px] max-md:w-[170px]">
               <Image
-                src="/avater.jpeg"
+                src="/avater.jpg"
                 alt="Abdulla Al Mahin"
                 fill
                 sizes="(max-width: 768px) 170px, 220px"
@@ -693,7 +693,7 @@ export default function About() {
               Open to thoughtful product work.
             </p>
             <Link
-              href="mailto:mahin@example.com"
+              href="mailto:icrmahin@gmail.com"
               className="group inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--color-ink-secondary)] transition-colors duration-200 hover:text-[var(--color-ink)]"
             >
               Let&apos;s work together
